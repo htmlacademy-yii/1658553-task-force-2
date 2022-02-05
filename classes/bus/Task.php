@@ -1,4 +1,5 @@
 <?php
+namespace classes\bus;
 
 class Task
 {
