@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use src\models\Task;
+use taskforce\models\Task;
 
 
 
