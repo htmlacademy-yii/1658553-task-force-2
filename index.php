@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
-use src\models\Task;
+use taskforce\models\Task;
 
 
 /**
@@ -8,3 +8,4 @@ use src\models\Task;
  */
 $task = new Task(1,2);
 var_dump($task);
+
