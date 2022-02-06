@@ -1,4 +1,5 @@
 <?php
+namespace taskforce\models;
 
 class Task
 {
