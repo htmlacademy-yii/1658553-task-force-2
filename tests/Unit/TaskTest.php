@@ -3,7 +3,7 @@
 namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use classes\bus\Task;
+use src\models\Task;
 
 
 

@@ -1,5 +1,5 @@
 <?php
-namespace classes\bus;
+namespace src\models;
 
 class Task
 {
