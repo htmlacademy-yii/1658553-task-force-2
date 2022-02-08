@@ -3,9 +3,9 @@
 namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use Task;
+use taskforce\models\Task;
 
-require_once __DIR__."/../../classes/Task.php";
+
 
 class TaskTest extends TestCase
 {
