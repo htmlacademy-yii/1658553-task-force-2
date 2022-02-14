@@ -3,79 +3,108 @@ CREATE DATABASE taskforce
   DEFAULT COLLATE utf8_general_ci;
 USE taskforce;
 
-CREATE TABLE location
+CREATE TABLE cities
 (
-  id   int AUTO_INCREMENT PRIMARY KEY,
-  city varchar(24)
+  id          int AUTO_INCREMENT PRIMARY KEY,
+  name        varchar(24) NOT NULL,
+  coordinates point       NOT NULL
+
 );
+
 CREATE TABLE categories
 (
-  id       int AUTO_INCREMENT PRIMARY KEY,
-  category varchar(64)
-
+  id   int AUTO_INCREMENT PRIMARY KEY,
+  name varchar(64) NOT NULL
 );
-
-CREATE TABLE user_status
+CREATE TABLE files
 (
-  id     int AUTO_INCREMENT PRIMARY KEY,
-  status varchar(244)
-
-);
-CREATE TABLE task_status
-(
-  id     int AUTO_INCREMENT PRIMARY KEY,
-  status varchar(244)
-
+  id   int AUTO_INCREMENT PRIMARY KEY,
+  path varchar(1024) NOT NULL
 );
 
-CREATE TABLE user
+CREATE TABLE users
 (
   id               int AUTO_INCREMENT PRIMARY KEY,
-  reg_date         datetime,
-  email            varchar(128),
-  login            varchar(128),
-  password         varchar(64),
-  avatar           text,
-  contact_telegram varchar(24),
-  contact_phone    varchar(11),
-  contact_mail     varchar(24),
-  location_id      int,
-  info             text,
-  rating           int,
-  status_id        int,
-  FOREIGN KEY (`location_id`) REFERENCES location (`id`),
-  FOREIGN KEY (`status_id`) REFERENCES user_status (`id`)
-
-);
-CREATE TABLE user_specialization
-(
-  id                int AUTO_INCREMENT PRIMARY KEY,
-  specialization_id int,
-  user_id           int,
-  FOREIGN KEY (`specialization_id`) REFERENCES categories (`id`),
-  FOREIGN KEY (`user_id`) REFERENCES user (`id`)
+  create_date      datetime     NOT NULL,
+  email            varchar(128) NOT NULL,
+  login            varchar(128) NOT NULL,
+  password         varchar(64)  NOT NULL,
+  avatar_file_id   int          NULL,
+  contact_telegram varchar(24)  NULL,
+  contact_phone    varchar(11)  NULL,
+  city_id          int  NOT NULL,
+  birthday         datetime     NULL,
+  info             text         NULL,
+  rating           int          NULL,
+  status           int          NULL,
+  is_executor      bool         NOT NULL,
+  FOREIGN KEY (`city_id`) REFERENCES cities (`id`)
 
 );
 
-CREATE TABLE task
+CREATE TABLE user_categories
 (
-  id               int AUTO_INCREMENT PRIMARY KEY,
-  reg_date         datetime,
-  execution_date   datetime,
-  header           varchar(255),
-  info             text,
-  category_id      int,
-  location_id      int,
-  price            int,
-  file             text,
-  task_status_id   int,
-  task_customer_id int,
-  task_executor_id int,
-  FOREIGN KEY (`task_customer_id`) REFERENCES user (`id`),
-  FOREIGN KEY (`task_executor_id`) REFERENCES user (`id`),
-  FOREIGN KEY (`task_status_id`) REFERENCES task_status (`id`),
+  id          int AUTO_INCREMENT PRIMARY KEY,
+  category_id int NOT NULL,
+  user_id     int NOT NULL,
   FOREIGN KEY (`category_id`) REFERENCES categories (`id`),
-  FOREIGN KEY (`location_id`) REFERENCES location (`id`)
+  FOREIGN KEY (`user_id`) REFERENCES users (`id`)
+);
+
+CREATE TABLE tasks
+(
+  id               int AUTO_INCREMENT PRIMARY KEY,
+  create_time      datetime     NOT NULL,
+  deadline_time    datetime     NOT NULL,
+  name             varchar(255) NOT NULL,
+  info             text         NOT NULL,
+  category_id      int          NOT NULL,
+  city_id          int          NOT NULL,
+  price            int          null NOT NULL,
+  task_status_id   int          NOT NULL,
+  task_customer_id int          NOT NULL,
+  task_executor_id int          NULL,
+  status           int          NOT NULL,
+  FOREIGN KEY (`task_customer_id`) REFERENCES users (`id`),
+  FOREIGN KEY (`task_executor_id`) REFERENCES users (`id`),
+  FOREIGN KEY (`category_id`) REFERENCES categories (`id`),
+  FOREIGN KEY (`city_id`) REFERENCES cities (`id`)
+);
+
+CREATE TABLE task_files
+(
+  id      int AUTO_INCREMENT PRIMARY KEY,
+  task_id int NOT NULL,
+  file_id int NOT NULL,
+  FOREIGN KEY (`task_id`) REFERENCES tasks (`id`),
+  FOREIGN KEY (`file_id`) REFERENCES files (`id`)
 
 );
+
+CREATE TABLE responses
+(
+  id          int AUTO_INCREMENT PRIMARY KEY,
+  task_id     int      NOT NULL,
+  executor_id int      NOT NULL,
+  price       int      NOT NULL,
+  comment     text     NOT NULL,
+  rejected    bool DEFAULT FALSE,
+  create_time datetime NOT NULL,
+  FOREIGN KEY (`task_id`) REFERENCES tasks (`id`),
+  FOREIGN KEY (`executor_id`) REFERENCES users (`id`)
+);
+
+CREATE TABLE reviews
+(
+  id          int AUTO_INCREMENT PRIMARY KEY,
+  executor_id int      NOT NULL,
+  custumer_id int      NOT NULL,
+  task_id     int      NOT NULL,
+  score       int      NOT NULL,
+  comment     text     NOT NULL,
+  create_time datetime NOT NULL
+
+);
+
+CREATE UNIQUE INDEX email ON users (email)
 
