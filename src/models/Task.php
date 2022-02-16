@@ -15,8 +15,8 @@ class Task
     public const ACTION_REFUSE = 'refuse';
 
 
-    private int $customerId;
-    private int $executorId;
+    public int $customerId;
+    public int $executorId;
     public string $status;
 
     public function __construct(int $customerId, int $executorId = null)
@@ -45,15 +45,15 @@ class Task
     /**
      * возвращает карту действий
      *
-     * @return string[] Карта действий
+     *
      */
     public function getActionMap()
     {
         return [
-            self::ACTION_CANCEL  => 'отменить',
-            self::ACTION_DONE    => 'завершить',
-            self::ACTION_REFUSE  => 'отказаться',
-            self::ACTION_RESPOND => 'откликнуться',
+             new ActionCancel(),
+             new ActionDone(),
+             new ActionRefuse(),
+             new ActionRespond(),
         ];
     }
 
