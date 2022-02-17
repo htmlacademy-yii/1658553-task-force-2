@@ -15,7 +15,7 @@ class ActionCancel extends AbstractAction
 
     public function isAvailable(Task $task, int $profileUser)
     {
-        if ($task->status === Task::STATUS_NEW & $task->customerId === $profileUser) {
+        if ($task->status === Task::STATUS_NEW && $task->customerId === $profileUser) {
             return true;
         }
     }

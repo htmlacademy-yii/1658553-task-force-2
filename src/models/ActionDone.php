@@ -16,7 +16,7 @@ class ActionDone extends AbstractAction
 
     public function isAvailable(Task $task, int $profileUser)
     {
-        if ($task->status === Task::STATUS_IN_WORK & $task->customerId === $profileUser) {
+        if ($task->status === Task::STATUS_IN_WORK && $task->customerId === $profileUser) {
             return true;
         }
     }
