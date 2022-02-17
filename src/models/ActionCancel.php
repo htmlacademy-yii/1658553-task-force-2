@@ -12,17 +12,8 @@ class ActionCancel extends AbstractAction
         $this->code = 'cancel';
     }
 
-    public function getName()
-    {
-        return $this->name;
-    }
 
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-    public function isAction(task $task, int $profileUser)
+    public function isAvailable(Task $task, int $profileUser)
     {
         if ($task->status === Task::STATUS_NEW & $task->customerId === $profileUser) {
             return true;

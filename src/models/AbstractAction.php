@@ -4,11 +4,20 @@ namespace taskforce\models;
 
 abstract class AbstractAction
 {
+    protected string $name;
+    protected string $code;
 
-    abstract public function getName();
+    public function getName()
+    {
+        return $this->name;
+    }
 
 
-    abstract public function getCode();
+    public function getCode()
+    {
+        return $this->code;
+    }
 
+    abstract function isAvailable(Task $task, int $profileUser);
 
 }

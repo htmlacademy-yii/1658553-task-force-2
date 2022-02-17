@@ -12,17 +12,9 @@ class ActionRefuse extends AbstractAction
         $this->code = 'refuse';
     }
 
-    public function getName()
-    {
-        return $this->name;
-    }
 
-    public function getCode()
-    {
-        return $this->code;
-    }
 
-    public function isAction(task $task, int $profileUser)
+    public function isAvailable(Task $task, int $profileUser)
     {
         if ($task->status === Task::STATUS_IN_WORK & $task->executorId === $profileUser) {
             return true;
