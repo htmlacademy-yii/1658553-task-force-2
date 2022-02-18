@@ -1,11 +1,14 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
-use taskforce\models\Task;
 
+require_once __DIR__.'/vendor/autoload.php';
+use taskforce\models\Task;
+use taskforce\models\ActionCancel;
 
 /**
- * Своеборазный тестовый сценарий, удалю его к следующему заданию.
+ * файл для тестов
  */
-$task = new Task(1,2);
-var_dump($task);
+
+$test = new Task(1,2);
+var_dump($test->getActionMap()[0]->isAvailable($test,1));
+
 
