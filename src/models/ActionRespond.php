@@ -14,11 +14,12 @@ class ActionRespond extends AbstractAction
 
 
 
-    public function isAvailable(Task $task, int $profileUser)
+    public function isAvailable(Task $task, int $profileUser):bool
     {
         if ($task->status === Task::STATUS_NEW && $task->executorId === $profileUser) {
             return true;
         }
+        return false;
     }
 
 }
