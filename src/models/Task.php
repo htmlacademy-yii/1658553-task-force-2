@@ -1,5 +1,7 @@
 <?php
+
 namespace taskforce\models;
+
 use taskforce\exception;
 
 class Task
@@ -26,11 +28,11 @@ class Task
         $this->customerId = $customerId;
         $this->status = $status ?? self::STATUS_NEW;
 
-        if (!array_key_exists($this->status,$this->getStatusMap())){
-            throw new exception\CustomException('такого статуса нет');
+        if (!array_key_exists($this->status, $this->getStatusMap())) {
+            throw new exception\IncorrectStatusException('такого статуса нет');
         }
-        if ($this->executorId===$this->customerId){
-            throw new exception\CustomException('заказчик не может быть исполнителем');
+        if ($this->executorId === $this->customerId) {
+            throw new exception\ExecutorIsCustomerException('заказчик не может быть исполнителем');
         }
     }
 
@@ -39,7 +41,7 @@ class Task
      *
      * @return string[] Карта статусов
      */
-    public function getStatusMap():array
+    public function getStatusMap(): array
     {
         return [
             self::STATUS_NEW       => 'новое',
@@ -55,40 +57,41 @@ class Task
      *
      *
      */
-    public function getActionMap():array
+    public function getActionMap(): array
     {
         return [
-             new ActionCancel(),
-             new ActionDone(),
-             new ActionRefuse(),
-             new ActionRespond(),
+            new ActionCancel(),
+            new ActionDone(),
+            new ActionRefuse(),
+            new ActionRespond(),
         ];
     }
 
     /**
      * Возвращает статус после определенного действия
      *
-     * @param Task $task Класс задачи
+     * @param Task $task        Класс задачи
      * @param int  $profileUser id хозяина профиля
      *
      * @return string Доступный статус
-     * @throws exception\CustomException
+     * @throws exception\IncorrectActionException
      */
     public function getNextStatus(Task $task, int $profileUser): string
     {
-        if ((new ActionCancel())->isAvailable($task,$profileUser)){
-            return $this->status=self::STATUS_CANCELLED;
+        if ((new ActionCancel())->isAvailable($task, $profileUser)) {
+            return $this->status = self::STATUS_CANCELLED;
         }
-        if ((new ActionDone())->isAvailable($task,$profileUser)){
-            return $this->status=self::STATUS_DONE;
+        if ((new ActionDone())->isAvailable($task, $profileUser)) {
+            return $this->status = self::STATUS_DONE;
         }
-        if ((new ActionRefuse())->isAvailable($task,$profileUser)){
-            return $this->status=self::STATUS_FAILED;
+        if ((new ActionRefuse())->isAvailable($task, $profileUser)) {
+            return $this->status = self::STATUS_FAILED;
         }
-        if ((new ActionRespond())->isAvailable($task,$profileUser)){
-            return $this->status=self::STATUS_IN_WORK;
+        if ((new ActionRespond())->isAvailable($task, $profileUser)) {
+            return $this->status = self::STATUS_IN_WORK;
         }
-        return throw new exception\CustomException('такое действие не возможно???');
+
+         throw new exception\IncorrectActionException('такое действие не возможно???');
     }
 
     /**
@@ -96,12 +99,13 @@ class Task
      *
      * @param Task $task Класс задачи
      *
-     * @return array|exception\CustomException Доступные статусами
+     * @return array Доступные статусами
+     * @throws exception\IncorrectStatusException
      */
-    public function getAvailebleStatus(Task $task): array|exception\CustomException
+    public function getAvailebleStatus(Task $task): array
     {
-        if (!array_key_exists($task->status,$this->getStatusMap())){
-            throw new exception\CustomException('такого статуса нет');
+        if (!array_key_exists($task->status, $this->getStatusMap())) {
+            throw new exception\IncorrectStatusException('такого статуса нет');
         }
         $data = [
             self::STATUS_NEW     => [
