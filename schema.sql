@@ -6,7 +6,7 @@ USE taskforce;
 CREATE TABLE cities
 (
   id          int AUTO_INCREMENT PRIMARY KEY,
-  name        varchar(24) NOT NULL,
+  name        varchar(64) NOT NULL,
   coordinates point       NOT NULL
 
 );
@@ -106,4 +106,7 @@ CREATE TABLE reviews
 );
 
 CREATE UNIQUE INDEX email ON users (email)
+
+
+
 

@@ -3,14 +3,19 @@
 require_once __DIR__.'/vendor/autoload.php';
 
 use taskforce\models\Task;
-use PHPUnit\Framework\TestCase;
-use taskforce\exception;
 
 /**
  * файл  тестов для браузера
  */
 
-$test = new Task(1, 2);
+$test = new Task('done',1,2);
+var_dump($test->status);
 
-$status = $test->getNextStatus($test, 1);
+
+
+
+
+
+
+
 

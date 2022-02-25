@@ -22,11 +22,11 @@ class Task
     public int $executorId;
     public string $status;
 
-    public function __construct(int $customerId, int $executorId = null)
+    public function __construct(string $status,int $customerId, int $executorId = null)
     {
         $this->executorId = $executorId;
         $this->customerId = $customerId;
-        $this->status = $status ?? self::STATUS_NEW;
+        $this->status = $status;
 
         if (!array_key_exists($this->status, $this->getStatusMap())) {
             throw new exception\IncorrectStatusException('такого статуса нет');
@@ -79,19 +79,19 @@ class Task
     public function getNextStatus(Task $task, int $profileUser): string
     {
         if ((new ActionCancel())->isAvailable($task, $profileUser)) {
-            return $this->status = self::STATUS_CANCELLED;
+            return self::STATUS_CANCELLED;
         }
         if ((new ActionDone())->isAvailable($task, $profileUser)) {
-            return $this->status = self::STATUS_DONE;
+            return self::STATUS_DONE;
         }
         if ((new ActionRefuse())->isAvailable($task, $profileUser)) {
-            return $this->status = self::STATUS_FAILED;
+            return self::STATUS_FAILED;
         }
         if ((new ActionRespond())->isAvailable($task, $profileUser)) {
-            return $this->status = self::STATUS_IN_WORK;
+            return self::STATUS_IN_WORK;
         }
 
-         throw new exception\IncorrectActionException('такое действие не возможно???');
+        throw new exception\IncorrectActionException('такое действие не возможно???');
     }
 
     /**
@@ -102,7 +102,7 @@ class Task
      * @return array Доступные статусами
      * @throws exception\IncorrectStatusException
      */
-    public function getAvailebleStatus(Task $task): array
+    public function getAvailableStatus(Task $task): array
     {
         if (!array_key_exists($task->status, $this->getStatusMap())) {
             throw new exception\IncorrectStatusException('такого статуса нет');
