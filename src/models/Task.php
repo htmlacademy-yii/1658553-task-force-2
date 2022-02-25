@@ -1,5 +1,8 @@
 <?php
+
 namespace taskforce\models;
+
+use taskforce\exception;
 
 class Task
 {
@@ -19,11 +22,18 @@ class Task
     public int $executorId;
     public string $status;
 
-    public function __construct(int $customerId, int $executorId = null)
+    public function __construct(string $status,int $customerId, int $executorId = null)
     {
         $this->executorId = $executorId;
         $this->customerId = $customerId;
-        $this->status = $status ?? self::STATUS_NEW;
+        $this->status = $status;
+
+        if (!array_key_exists($this->status, $this->getStatusMap())) {
+            throw new exception\IncorrectStatusException('такого статуса нет');
+        }
+        if ($this->executorId === $this->customerId) {
+            throw new exception\ExecutorIsCustomerException('заказчик не может быть исполнителем');
+        }
     }
 
     /**
@@ -31,7 +41,7 @@ class Task
      *
      * @return string[] Карта статусов
      */
-    public function getStatusMap()
+    public function getStatusMap(): array
     {
         return [
             self::STATUS_NEW       => 'новое',
@@ -47,45 +57,56 @@ class Task
      *
      *
      */
-    public function getActionMap()
+    public function getActionMap(): array
     {
         return [
-             new ActionCancel(),
-             new ActionDone(),
-             new ActionRefuse(),
-             new ActionRespond(),
+            new ActionCancel(),
+            new ActionDone(),
+            new ActionRefuse(),
+            new ActionRespond(),
         ];
     }
 
     /**
      * Возвращает статус после определенного действия
      *
-     * @param string $action Действие
+     * @param Task $task        Класс задачи
+     * @param int  $profileUser id хозяина профиля
      *
      * @return string Доступный статус
+     * @throws exception\IncorrectActionException
      */
-    public function getNextStatus(string $action): string
+    public function getNextStatus(Task $task, int $profileUser): string
     {
-        $data = [
-            self::ACTION_CANCEL  => self::STATUS_CANCELLED,
-            self::ACTION_DONE    => self::STATUS_DONE,
-            self::ACTION_REFUSE  => self::STATUS_FAILED,
-            self::ACTION_RESPOND => self::STATUS_IN_WORK,
+        if ((new ActionCancel())->isAvailable($task, $profileUser)) {
+            return self::STATUS_CANCELLED;
+        }
+        if ((new ActionDone())->isAvailable($task, $profileUser)) {
+            return self::STATUS_DONE;
+        }
+        if ((new ActionRefuse())->isAvailable($task, $profileUser)) {
+            return self::STATUS_FAILED;
+        }
+        if ((new ActionRespond())->isAvailable($task, $profileUser)) {
+            return self::STATUS_IN_WORK;
+        }
 
-        ];
-
-        return $data[$action] ?? '';
+        throw new exception\IncorrectActionException('такое действие не возможно???');
     }
 
     /**
      * возвращает список доступных действий из конкретного статуса
      *
-     * @param string $status статус
+     * @param Task $task Класс задачи
      *
-     * @return array  Доступные статусами
+     * @return array Доступные статусами
+     * @throws exception\IncorrectStatusException
      */
-    public function getAvailebleStatus(string $status): array
+    public function getAvailableStatus(Task $task): array
     {
+        if (!array_key_exists($task->status, $this->getStatusMap())) {
+            throw new exception\IncorrectStatusException('такого статуса нет');
+        }
         $data = [
             self::STATUS_NEW     => [
                 self::ACTION_RESPOND,
@@ -97,7 +118,7 @@ class Task
             ],
         ];
 
-        return $data[$status] ?? [];
+        return $data[$task->status] ?? [];
     }
 
 }

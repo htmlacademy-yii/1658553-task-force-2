@@ -4,75 +4,102 @@ namespace Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
 use taskforce\models\Task;
+use taskforce\exception;
+
+
 
 
 
 class TaskTest extends TestCase
 {
+
     /**
      * Тестирование статусов после конкретного действия
      */
+    public function testGetNextStatusException()
+    {
+
+        $task = new Task('new',1, 2);
+        $task->status = 'notExistingStatus';
+        $this->expectException(exception\IncorrectActionException::class);
+        $task->getNextStatus($task, 1);
+
+
+    }
     public function testGetNextStatusCancel()
     {
-        $task = new Task(1, 2);
-        $status = $task->getNextStatus('cancel');
 
+        $task = new Task('new',1, 2);
+        $status = $task->getNextStatus($task,1);
         $this->assertEquals('cancelled', $status);
+
     }
+
+
 
     public function testGetNextStatusDone()
     {
-        $task = new Task(1, 2);
-        $status = $task->getNextStatus('done');
-
+        $task = new Task('inWork',1, 2);
+        $status = $task->getNextStatus($task,1);
         $this->assertEquals('done', $status);
     }
 
+
     public function testGetNextStatusFailed()
     {
-        $task = new Task(1, 2);
-        $status = $task->getNextStatus('refuse');
-
+        $task = new Task('inWork',1, 2);
+        $status = $task->getNextStatus($task,2);
         $this->assertEquals('failed', $status);
     }
 
     public function testGetNextStatusInWork()
     {
-        $task = new Task(1, 2);
-        $status = $task->getNextStatus('respond');
-
+        $task = new Task('new',1, 2);
+        $status = $task->getNextStatus($task,2);
         $this->assertEquals('inWork', $status);
     }
 
     /**
      * тестирование доступных действий от конкретного статуса
      */
-    public function testGetAvailebleStatusNewRespond()
+    public function testGetAvailableStatusException()
     {
-        $task = new Task(1, 2);
-        $status = $task->getAvailebleStatus('new');
+
+        $task = new Task('new',1, 2);
+        $task->status = 'notExistingStatus';
+        $this->expectException(exception\IncorrectStatusException::class);
+        $task->getAvailableStatus($task);
+
+
+    }
+    public function testGetAvailableStatusNewRespond()
+    {
+
+        $task = new Task('new',1, 2);
+        $status = $task->getAvailableStatus($task);
         $this->assertEquals('respond', $status[0]);
+
     }
 
-    public function testGetAvailebleStatusNewCancel()
+    public function testGetAvailableStatusNewCancel()
     {
-        $task = new Task(1, 2);
-        $status = $task->getAvailebleStatus('new');
+        $task = new Task('new',1, 2);
+        $status = $task->getAvailableStatus($task);
         $this->assertEquals('cancel', $status[1]);
     }
 
-    public function testGetAvailebleStatusWorkDone()
+    public function testGetAvailableStatusWorkDone()
     {
-        $task = new Task(1, 2);
-        $status = $task->getAvailebleStatus('inWork');
+        $task = new Task('inWork',1, 2);
+        $status = $task->getAvailableStatus($task);
         $this->assertEquals('done', $status[0]);
     }
 
-    public function testGetAvailebleStatusWorkRefuse()
+    public function testGetAvailableStatusWorkRefuse()
     {
-        $task = new Task(1, 2);
-        $status = $task->getAvailebleStatus('inWork');
+        $task = new Task('inWork',1, 2);
+        $status = $task->getAvailableStatus($task);
         $this->assertEquals('refuse', $status[1]);
     }
 
-}
+};
