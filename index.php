@@ -11,6 +11,7 @@ use taskforce\models\Task;
 $test = new Task('done',1,2);
 var_dump($test->status);
 var_dump('tess');
+qwe
 
 
 
