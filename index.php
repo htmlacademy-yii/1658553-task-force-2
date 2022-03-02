@@ -13,6 +13,7 @@ $test = new \taskforce\parsing\ParsingCitySql('cities');
 $test->copyToSql();
 $test1 = new \taskforce\parsing\ParsingCategoriesToSql('categories');
 $test1->copyToSql();
+var_dump($test1);
 
 
 
