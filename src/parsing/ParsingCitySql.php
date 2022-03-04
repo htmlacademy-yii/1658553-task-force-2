@@ -26,7 +26,7 @@ class ParsingCitySql extends AbstractParsingToSql
                 foreach ($arrayIntoString as $key=>$value){
                     $trimData[] = trim($value);
                 }
-                $query = "INSERT INTO cities (`name`, `coordinates`) VALUES ('$arrayIntoString[0]',
+                $query = "INSERT INTO cities (`name`, `coordinates`) VALUES ('$trimData[0]',
             POINT('$trimData[1]', '$trimData[2]'));";
                 file_put_contents("$this->name.sql", $query, FILE_APPEND);
             }
