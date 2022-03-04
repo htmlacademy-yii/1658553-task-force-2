@@ -1,23 +1,16 @@
 INSERT INTO categories (`name`, `icon`)
-VALUES ('Курьерские услуги', 'translation
-');
+VALUES ('Курьерские услуги', 'translation');
 INSERT INTO categories (`name`, `icon`)
-VALUES ('Уборка', 'clean
-');
+VALUES ('Уборка', 'clean');
 INSERT INTO categories (`name`, `icon`)
-VALUES ('Переезды', 'cargo
-');
+VALUES ('Переезды', 'cargo');
 INSERT INTO categories (`name`, `icon`)
-VALUES ('Компьютерная помощь', 'neo
-');
+VALUES ('Компьютерная помощь', 'neo');
 INSERT INTO categories (`name`, `icon`)
-VALUES ('Ремонт квартирный', 'flat
-');
+VALUES ('Ремонт квартирный', 'flat');
 INSERT INTO categories (`name`, `icon`)
-VALUES ('Ремонт техники', 'repair
-');
+VALUES ('Ремонт техники', 'repair');
 INSERT INTO categories (`name`, `icon`)
-VALUES ('Красота', 'beauty
-');
+VALUES ('Красота', 'beauty');
 INSERT INTO categories (`name`, `icon`)
 VALUES ('Фото', 'photo');
