@@ -5,7 +5,7 @@ namespace taskforce\parsing;
 use SplFileObject;
 use taskforce\exception;
 
-class ParsingCitySql extends AbstractParsingToSql
+class ParsingResponsesToSql extends AbstractParsingToSql
 {
     public function __construct($name)
     {
@@ -26,11 +26,12 @@ class ParsingCitySql extends AbstractParsingToSql
                 foreach ($arrayIntoString as $key=>$value){
                     $trimData[] = trim($value);
                 }
-                $query = "INSERT INTO cities (`name`, `coordinates`) VALUES ('$arrayIntoString[0]',
-            POINT('$trimData[1]', '$trimData[2]'));";
+                $query
+                    = "INSERT INTO responses (`task_id`,`executor_id`,`price`,`comment`,`rejected`,`create_time`) VALUES
+                ('$trimData[0]','$trimData[1]','$trimData[2]','$trimData[3]',
+                 '$trimData[4]','$trimData[5]');";
                 file_put_contents("$this->name.sql", $query, FILE_APPEND);
             }
         }
     }
-
 }

@@ -1,7 +1,9 @@
 <?php
 
 namespace taskforce\parsing;
+
 use SplFileObject;
+use taskforce\exception;
 
 class ParsingCategoriesToSql extends AbstractParsingToSql
 {
@@ -12,12 +14,22 @@ class ParsingCategoriesToSql extends AbstractParsingToSql
 
     public function copyToSql()
     {
+        if (file_exists(__DIR__."/../../$this->name.sql")) {
+            throw new exception\ParsingToSqlException('Такой уже существует');
+        }
         $file = new SplFileObject(__DIR__."/../../data/$this->name.csv");
         for ($i = 1; $file->valid(); $i++) {
             $file->seek($i);
-            $arrayIntoString = explode(',', $file->current());
-            $query = "INSERT INTO categories (`name`, `icon`) VALUES ('$arrayIntoString[0]','$arrayIntoString[1]');";
-            file_put_contents("$this->name.sql", $query, FILE_APPEND);
+            if ($file->current()) {
+                $arrayIntoString = explode(',', $file->current());
+                $trimData = [];
+                foreach ($arrayIntoString as $key => $value) {
+                    $trimData[] = trim($value);
+                }
+                $query
+                    = "INSERT INTO categories (`name`, `icon`) VALUES ('$trimData[0]','$trimData[1]');";
+                file_put_contents("$this->name.sql", $query, FILE_APPEND);
+            }
         }
     }
 
