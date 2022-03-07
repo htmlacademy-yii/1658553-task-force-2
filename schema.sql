@@ -14,7 +14,9 @@ CREATE TABLE cities
 CREATE TABLE categories
 (
   id   int AUTO_INCREMENT PRIMARY KEY,
-  name varchar(64) NOT NULL
+  name varchar(64) NOT NULL,
+  icon varchar(64) NOT NULL
+
 );
 CREATE TABLE files
 (
