@@ -12,6 +12,20 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'components' => [
+        'assetManager' => [
+            'bundles' => [
+                'yii\web\JqueryAsset' => [
+                    'js'=>[]
+                ],
+                'yii\bootstrap\BootstrapPluginAsset' => [
+                    'js'=>[]
+                ],
+                'yii\bootstrap\BootstrapAsset' => [
+                    'css' => [],
+                ],
+
+            ],
+        ],
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'mtE2xqSfDJy8p9OnmJVyL3Kv6QxXXUzE',
@@ -51,6 +65,7 @@ $config = [
             ],
         ],
 
+
     ],
     'controllerMap' => [
         'fixture' => [
@@ -60,6 +75,7 @@ $config = [
             'namespace' => 'common\fixtures',
         ],
     ],
+
     'params' => $params,
 ];
 

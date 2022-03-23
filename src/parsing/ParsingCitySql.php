@@ -28,7 +28,7 @@ class ParsingCitySql extends AbstractParsingToSql
                 }
                 $query = "INSERT INTO cities (`name`, `coordinates`) VALUES ('$trimData[0]',
             POINT('$trimData[1]', '$trimData[2]'));";
-                file_put_contents("$this->name.sql", $query, FILE_APPEND);
+                file_put_contents(__DIR__."../../../chema/$this->name.sql", $query, FILE_APPEND);
             }
         }
     }

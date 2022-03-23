@@ -12,7 +12,7 @@ use Yii;
  * @property int $executor_id
  * @property int $price
  * @property string $comment
- * @property int|null $rejected
+ * @property int $rejected
  * @property string $create_time
  *
  * @property Users $executor

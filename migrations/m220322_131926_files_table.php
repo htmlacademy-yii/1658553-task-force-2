@@ -3,16 +3,19 @@
 use yii\db\Migration;
 
 /**
- * Class m220319_100858_chema_bd
+ * Class m220322_131926_files_table
  */
-class m220319_100858_chema_bd extends Migration
+class m220322_131926_files_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-
+        $this->createTable('files', [
+            'id' => $this->primaryKey(),
+            'path' => $this->string(1024)->notNull(),
+        ]);
     }
 
     /**
@@ -20,7 +23,7 @@ class m220319_100858_chema_bd extends Migration
      */
     public function safeDown()
     {
-        echo "m220319_100858_chema_bd cannot be reverted.\n";
+        echo "m220322_131926_files_table cannot be reverted.\n";
 
         return false;
     }
@@ -34,7 +37,7 @@ class m220319_100858_chema_bd extends Migration
 
     public function down()
     {
-        echo "m220319_100858_chema_bd cannot be reverted.\n";
+        echo "m220322_131926_files_table cannot be reverted.\n";
 
         return false;
     }
