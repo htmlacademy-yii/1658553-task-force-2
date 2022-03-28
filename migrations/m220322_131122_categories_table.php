@@ -17,7 +17,7 @@ class m220322_131122_categories_table extends Migration
             'name' => $this->string(64)->notNull(),
             'icon' => $this->string(64)->notNull(),
         ]);
-        $this->execute(file_get_contents(__DIR__.'/../chema/categories.sql'));
+        $this->execute(file_get_contents(__DIR__.'/../schema/categories.sql'));
     }
 
     /**

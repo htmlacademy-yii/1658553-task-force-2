@@ -19,7 +19,7 @@ class m220321_182330_cities_table extends Migration
         ]);
         $this->execute("ALTER TABLE cities
 	add coordinates point not null ;");
-        $this->execute(file_get_contents(__DIR__.'/../chema/cities.sql'));
+        $this->execute(file_get_contents(__DIR__.'/../schema/cities.sql'));
     }
 
     /**
