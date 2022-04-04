@@ -1,7 +1,6 @@
 <?php
 /* @var $this yii\web\View */
-/* @var array $taskInfo */
-
+/* @var object $taskInfo */
 ?>
 <main class="main-content container">
     <div class="left-column">
@@ -9,20 +8,21 @@
         <?php foreach ($taskInfo as $task): ?>
         <div class="task-card">
             <div class="header-task">
-                <a  href="#" class="link link--block link--big"><?=$task['name']?></a>
-                <p class="price price--task"><?=$task['price']?> ₽</p>
+                <a  href="#" class="link link--block link--big"><?=$task->name?></a>
+                <p class="price price--task"><?=$task->price?> ₽</p>
             </div>
-            <p class="info-text"><span class="current-time"><?=$task['create_time']?> </span>назад</p>
+            <p class="info-text"><span class="current-time"><?=$task->create_time?> </span>назад</p>
             <p class="task-text">
-                <?=$task['info']?>
+                <?=$task->info?>
             </p>
             <div class="footer-task">
-                <p class="info-text town-text"><?=$task['city']?></p>
+                <p class="info-text town-text"><?=$task->city->name?></p>
                 <p class="info-text category-text">Переводы</p>
                 <a href="#" class="button button--black">Смотреть Задание</a>
             </div>
         </div>
         <?php endforeach ?>
+
         <div class="pagination-wrapper">
             <ul class="pagination-list">
                 <li class="pagination-item mark">

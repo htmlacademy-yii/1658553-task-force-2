@@ -8,9 +8,9 @@ class FilesController extends \yii\web\Controller
 {
     public function actionIndex()
     {
-        $contact = new Files();
-        $contact->path = 'andry@list.ru';
-        $contact->save();
+//        $files = new Files();
+//        $files->path = 'somePathToTest';
+//        $files->save();
 
         return $this->render('index');
     }
