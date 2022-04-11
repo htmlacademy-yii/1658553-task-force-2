@@ -1,6 +1,8 @@
 <?php
 /* @var $this yii\web\View */
 /* @var object $taskInfo */
+
+
 ?>
 <main class="main-content container">
     <div class="left-column">
