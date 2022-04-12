@@ -9,7 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property int $executor_id
- * @property int $custumer_id
+ * @property int $customer_id
  * @property int $task_id
  * @property int $score
  * @property string $comment
@@ -31,8 +31,8 @@ class Reviews extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['executor_id', 'custumer_id', 'task_id', 'score', 'comment', 'create_time'], 'required'],
-            [['executor_id', 'custumer_id', 'task_id', 'score'], 'integer'],
+            [['executor_id', 'customer_id', 'task_id', 'score', 'comment', 'create_time'], 'required'],
+            [['executor_id', 'customer_id', 'task_id', 'score'], 'integer'],
             [['comment'], 'string'],
             [['create_time'], 'safe'],
         ];
@@ -46,7 +46,7 @@ class Reviews extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'executor_id' => 'Executor ID',
-            'custumer_id' => 'Custumer ID',
+            'customer_id' => 'Customer ID',
             'task_id' => 'Task ID',
             'score' => 'Score',
             'comment' => 'Comment',
