@@ -129,4 +129,13 @@ class Users extends \yii\db\ActiveRecord
     {
         return $this->hasMany(UserCategories::className(), ['user_id' => 'id']);
     }
+    /**
+     * Gets query for [[file]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFile()
+    {
+        return $this->hasOne(Files::className(), ['id' => 'avatar_file_id']);
+    }
 }

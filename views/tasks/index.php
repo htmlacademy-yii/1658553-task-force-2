@@ -14,10 +14,10 @@ use yii\widgets\ActiveForm;
         <h3 class="head-main head-task">Новые задания</h3>
         <?php
         foreach ($taskInfo as $task): ?>
-
             <div class="task-card">
                 <div class="header-task">
-                    <a href="#" class="link link--block link--big"><?= $task->name ?></a>
+                    <a href="tasks/view/<?=$task->id?>" class="link link--block link--big"><?=
+                        $task->name ?></a>
                     <p class="price price--task"><?= $task->price ?> ₽</p>
                 </div>
                 <p class="info-text"><span class="current-time"><?= $task->create_time ?> </span>назад</p>
@@ -72,6 +72,7 @@ use yii\widgets\ActiveForm;
                         (
                             \app\models\forms\TaskFilterForm::getCategories(),
                             ['separator'=>'<br>',
+                                'checked'=>true,
                                 ]
                         )->label(false) ?>
                     </div>
@@ -79,12 +80,12 @@ use yii\widgets\ActiveForm;
                     <div class="form-group">
 
                         <?= $form->field($taskFilterForm, 'isNoExecutor')->checkbox(
-                            $options = ['checked'=>!($taskFilterForm->isNoExecutor==='IS NOT NULL')],
+                            $options = ['checked'=>!empty($taskFilterForm->isNoExecutor)],
                             $enclosedByLabel = false
                         )->label('Без исполнителя'); ?>
 
                         <?= $form->field($taskFilterForm, 'isRemote')->checkbox(
-                            $options = ['checked'=>!($taskFilterForm->isRemote === '= 689')],
+                            $options = ['checked'=>!empty($taskFilterForm->isRemote)],
                             $enclosedByLabel = false
 
                         )->label('Удаленно'); ?>
