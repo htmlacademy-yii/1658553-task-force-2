@@ -15,7 +15,7 @@ class UserController extends \yii\web\Controller
     {
         $query = Users::find()->where("id = $id")->one();
         if (!$query){
-             return $this->render('view',[throw new NotFoundHttpException('Пользователь не найден')]);
+             throw new NotFoundHttpException('Пользователь не найден');
         }
 
         return $this->render('view',['userInfo'=>$query]);
