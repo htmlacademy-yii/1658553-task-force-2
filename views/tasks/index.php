@@ -1,29 +1,37 @@
 <?php
 /* @var $this yii\web\View */
+
 /* @var object $taskInfo */
+
+/* @var object $taskFilterForm */
+
+use yii\widgets\ActiveForm;
 
 
 ?>
 <main class="main-content container">
     <div class="left-column">
         <h3 class="head-main head-task">Новые задания</h3>
-        <?php foreach ($taskInfo as $task): ?>
-        <div class="task-card">
-            <div class="header-task">
-                <a  href="#" class="link link--block link--big"><?=$task->name?></a>
-                <p class="price price--task"><?=$task->price?> ₽</p>
+        <?php
+        foreach ($taskInfo as $task): ?>
+            <div class="task-card">
+                <div class="header-task">
+                    <a href="tasks/view/<?=$task->id?>" class="link link--block link--big"><?=
+                        $task->name ?></a>
+                    <p class="price price--task"><?= $task->price ?> ₽</p>
+                </div>
+                <p class="info-text"><span class="current-time"><?= $task->create_time ?> </span>назад</p>
+                <p class="task-text">
+                    <?= $task->info ?>
+                </p>
+                <div class="footer-task">
+                    <p class="info-text town-text"><?= $task->city->name ?></p>
+                    <p class="info-text category-text">Переводы</p>
+                    <a href="#" class="button button--black">Смотреть Задание</a>
+                </div>
             </div>
-            <p class="info-text"><span class="current-time"><?=$task->create_time?> </span>назад</p>
-            <p class="task-text">
-                <?=$task->info?>
-            </p>
-            <div class="footer-task">
-                <p class="info-text town-text"><?=$task->city->name?></p>
-                <p class="info-text category-text">Переводы</p>
-                <a href="#" class="button button--black">Смотреть Задание</a>
-            </div>
-        </div>
-        <?php endforeach ?>
+        <?php
+        endforeach ?>
 
         <div class="pagination-wrapper">
             <ul class="pagination-list">
@@ -48,35 +56,53 @@
     <div class="right-column">
         <div class="right-card black">
             <div class="search-form">
-                <form>
-                    <h4 class="head-card">Категории</h4>
-                    <div class="form-group">
-                        <div>
-                            <input type="checkbox" id="сourier-services" checked>
-                            <label class="control-label" for="сourier-services">Курьерские услуги</label>
-                            <input id="cargo-transportation" type="checkbox">
-                            <label class="control-label" for="cargo-transportation">Грузоперевозки</label>
-                            <input id="translations" type="checkbox">
-                            <label class="control-label" for="translations">Переводы</label>
-                        </div>
+                <?php
+                $form = ActiveForm::begin([
+                    'id'          => 'filter-form',
+                    'fieldConfig' => [
+                        'template'     => "{input}\n{label}",
+                        'options'      => ['class' => 'form-group'],
+                        'labelOptions' => ['class' => 'control-label'],
+                    ],
+                ]); ?>
+                <h4 class="head-card">Категории</h4>
+                <div class="form-group">
+                    <div>
+                        <?= $form->field($taskFilterForm, 'categoryIds')->checkboxList
+                        (
+                            \app\models\forms\TaskFilterForm::getCategories(),
+                            ['separator'=>'<br>',
+                                'checked'=>true,
+                                ]
+                        )->label(false) ?>
                     </div>
                     <h4 class="head-card">Дополнительно</h4>
                     <div class="form-group">
-                        <input id="without-performer" type="checkbox" checked>
-                        <label class="control-label" for="without-performer">Без исполнителя</label>
+
+                        <?= $form->field($taskFilterForm, 'isNoExecutor')->checkbox(
+                            $options = ['checked'=>!empty($taskFilterForm->isNoExecutor)],
+                            $enclosedByLabel = false
+                        )->label('Без исполнителя'); ?>
+
+                        <?= $form->field($taskFilterForm, 'isRemote')->checkbox(
+                            $options = ['checked'=>!empty($taskFilterForm->isRemote)],
+                            $enclosedByLabel = false
+
+                        )->label('Удаленно'); ?>
+
+
                     </div>
                     <h4 class="head-card">Период</h4>
                     <div class="form-group">
-                        <label for="period-value"></label>
-                        <select id="period-value">
-                            <option>1 час</option>
-                            <option>12 часов</option>
-                            <option>24 часа</option>
-                        </select>
+                        <?= $form->field($taskFilterForm, 'interval')->dropDownList
+                        (
+                            \app\models\forms\TaskFilterForm::getInterval()
+                        )->label(false) ?>
                     </div>
-                    <input type="button" class="button button--blue" value="Искать">
-                </form>
+                    <?= \yii\helpers\Html::submitButton('Искать', ['class' => 'button button--blue']); ?>
+                    <?php
+                    ActiveForm::end(); ?>
+                </div>
             </div>
         </div>
-    </div>
 </main>
