@@ -52,6 +52,10 @@ class Task
         ];
     }
 
+    public static function className()
+    {
+    }
+
     /**
      * возвращает карту действий
      *

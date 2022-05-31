@@ -18,6 +18,7 @@ use Yii;
  * @property int $customer_id
  * @property int|null $executor_id
  * @property int $status
+
  *
  * @property Categories $category
  * @property Cities $city
@@ -42,7 +43,7 @@ class Tasks extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['create_time', 'deadline_time', 'name', 'info', 'category_id', 'city_id', 'price', 'customer_id', 'status'], 'required'],
+            [['create_time', 'deadline_time', 'name', 'info', 'category_id', 'city_id', 'customer_id', 'status'], 'required'],
             [['create_time', 'deadline_time'], 'safe'],
             [['info'], 'string'],
             [['category_id', 'city_id', 'price', 'customer_id', 'executor_id', 'status'], 'integer'],
@@ -71,6 +72,7 @@ class Tasks extends \yii\db\ActiveRecord
             'customer_id' => 'Customer ID',
             'executor_id' => 'Executor ID',
             'status' => 'Status',
+
         ];
     }
 
@@ -132,5 +134,18 @@ class Tasks extends \yii\db\ActiveRecord
     public function getTaskFiles()
     {
         return $this->hasMany(TaskFiles::className(), ['task_id' => 'id']);
+    }
+    /**
+     * Gets query for [[file]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getFile()
+    {
+        return $this->hasOne(Files::className(), ['id' => 'files']);
+    }
+    public function getId()
+    {
+        return $this->id;
     }
 }

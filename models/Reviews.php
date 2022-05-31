@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use taskforce\models\Task;
 use Yii;
 
 /**
@@ -14,7 +15,9 @@ use Yii;
  * @property int $score
  * @property string $comment
  * @property string $create_time
+ *
  */
+
 class Reviews extends \yii\db\ActiveRecord
 {
     /**
@@ -52,5 +55,14 @@ class Reviews extends \yii\db\ActiveRecord
             'comment' => 'Comment',
             'create_time' => 'Create Time',
         ];
+    }
+    /**
+     * Gets query for [[Tasks]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getTasks()
+    {
+        return $this->hasOne(Tasks::className(), ['id' => 'task_id']);
     }
 }

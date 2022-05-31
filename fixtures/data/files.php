@@ -2,33 +2,33 @@
 
 return [
     'files0' => [
-        'path' => 'Ea enim delectus.',
+        'path' => '/img/avatars/anon.jpg',
     ],
     'files1' => [
-        'path' => 'Quos sequi.',
+        'path' => '/img/avatars/anon.jpg',
     ],
     'files2' => [
-        'path' => 'Nemo veniam.',
+        'path' => '/img/avatars/anon.jpg',
     ],
     'files3' => [
-        'path' => 'Illo quas non.',
+        'path' => '/img/avatars/anon.jpg',
     ],
     'files4' => [
-        'path' => 'Autem ipsam eveniet.',
+        'path' => '/img/avatars/anon.jpg',
     ],
     'files5' => [
-        'path' => 'Animi et iure.',
+        'path' => '/img/avatars/anon.jpg',
     ],
     'files6' => [
-        'path' => 'Sit vel voluptas.',
+        'path' => '/img/avatars/anon.jpg',
     ],
     'files7' => [
-        'path' => 'Quisquam ab in.',
+        'path' => '/img/avatars/anon.jpg',
     ],
     'files8' => [
-        'path' => 2,
+        'path' => '/img/avatars/anon.jpg',
     ],
     'files9' => [
-        'path' => 1,
+        'path' => '/img/avatars/anon.jpg',
     ],
 ];

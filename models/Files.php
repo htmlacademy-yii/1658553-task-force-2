@@ -53,4 +53,8 @@ class Files extends \yii\db\ActiveRecord
     {
         return $this->hasMany(TaskFiles::className(), ['file_id' => 'id']);
     }
+    public function getId()
+    {
+        return $this->id;
+    }
 }
