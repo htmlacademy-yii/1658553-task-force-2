@@ -21,7 +21,7 @@ use yii\web\IdentityInterface;
  * @property string|null $info
  * @property int|null $rating
  * @property int|null $status
- * @property int $is_executor
+
  *
  * @property Cities $city
  * @property Responses[] $responses
@@ -46,9 +46,9 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function rules()
     {
         return [
-            [['create_date', 'email', 'login', 'password', 'city_id', 'is_executor'], 'required'],
+            [['create_date', 'email', 'login', 'password', 'city_id'], 'required'],
             [['create_date', 'birthday'], 'safe'],
-            [['avatar_file_id', 'city_id', 'rating', 'status', 'is_executor'], 'integer'],
+            [['avatar_file_id', 'city_id', 'rating', 'status'], 'integer'],
             [['info'], 'string'],
             [['email', 'login'], 'string', 'max' => 128],
             [['password'], 'string', 'max' => 64],
@@ -79,7 +79,7 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             'info' => 'Info',
             'rating' => 'Rating',
             'status' => 'Status',
-            'is_executor' => 'Is Executor',
+
         ];
     }
 

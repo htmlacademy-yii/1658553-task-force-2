@@ -20,6 +20,5 @@ return [
     'info' => $faker->realTextBetween($minNbChars = 160, $maxNbChars = 200, $indexSize = 2),
     'rating' => $faker->numberBetween(1,2000),
     'status' => $faker->numberBetween(1,4),
-    'is_executor' => $faker->boolean(),
 
 ];

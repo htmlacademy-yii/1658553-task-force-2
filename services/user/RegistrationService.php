@@ -18,7 +18,6 @@ class RegistrationService extends Component
         $customer->email = $registrationForm->email;
         $customer->city_id = $registrationForm->city;
         $customer->password = yii::$app->getSecurity()->generatePasswordHash($registrationForm->password);
-        $customer->is_executor = $registrationForm->isExecutor;
         $customer->create_date = date('Y-m-d H:i:s');
         $customer->contact_phone = null;
         $customer->birthday = null;
