@@ -5,6 +5,7 @@
 
 /* @var object $taskFilterForm */
 
+use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 
@@ -16,8 +17,8 @@ use yii\widgets\ActiveForm;
         foreach ($taskInfo as $task): ?>
             <div class="task-card">
                 <div class="header-task">
-                    <a href="tasks/view/<?=$task->id?>" class="link link--block link--big"><?=
-                        $task->name ?></a>
+                    <?= Html::a($task->name, ['/tasks/view','id'=>$task->id], ['class'=>'link link--block 
+                    link--big']) ?>
                     <p class="price price--task"><?= $task->price ?> ₽</p>
                 </div>
                 <p class="info-text"><span class="current-time"><?= $task->create_time ?> </span>назад</p>

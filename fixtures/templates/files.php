@@ -8,5 +8,5 @@
 $faker = Faker\Factory::create('ru_RU');
 
 return [
-    'path' => $faker->sentence($nbWords = 2, $variableNbWords = true),
+    'path' => '/img/avatars/anon.jpg',
 ];

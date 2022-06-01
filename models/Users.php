@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\web\IdentityInterface;
 
 /**
  * This is the model class for table "users".
@@ -28,8 +29,9 @@ use Yii;
  * @property Tasks[] $tasks0
  * @property UserCategories[] $userCategories
  */
-class Users extends \yii\db\ActiveRecord
+class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
+
     /**
      * {@inheritdoc}
      */
@@ -53,6 +55,7 @@ class Users extends \yii\db\ActiveRecord
             [['contact_telegram'], 'string', 'max' => 24],
             [['contact_phone'], 'string', 'max' => 11],
             [['email'], 'unique'],
+            [['email'],'email'],
             [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => Cities::className(), 'targetAttribute' => ['city_id' => 'id']],
         ];
     }
@@ -137,5 +140,39 @@ class Users extends \yii\db\ActiveRecord
     public function getFile()
     {
         return $this->hasOne(Files::className(), ['id' => 'avatar_file_id']);
+    }
+    /**
+     * Gets query for [[Reviews]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getReviews()
+    {
+        return $this->hasMany(Reviews::className(), ['executor_id' => 'id']);
+    }
+
+    public static function findIdentity($id)
+    {
+        return static::findOne($id);
+    }
+
+    public static function findIdentityByAccessToken($token, $type = null)
+    {
+        return true;
+    }
+
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    public function getAuthKey()
+    {
+        return true;
+    }
+
+    public function validateAuthKey($authKey)
+    {
+        return true;
     }
 }

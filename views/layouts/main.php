@@ -1,30 +1,39 @@
 <?php
 
 /** @var yii\web\View $this */
+
 /** @var string $content */
 
+
 use app\assets\AppAsset;
+use app\models\Users;
 use app\widgets\Alert;
-use yii\widgets\Breadcrumbs;
 use yii\helpers\Html;
-//use yii\helpers\Nav;
-//use yii\helpers\NavBar;
+use yii\widgets\Breadcrumbs;
+
+use app\widgets\navigationBar\userBlock;
+
 
 AppAsset::register($this);
 
 ?>
-<?php $this->beginPage() ?>
+<?php
+$this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>" class="h-100">
 <head>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <?php $this->registerCsrfMetaTags() ?>
+    <?php
+    $this->registerCsrfMetaTags() ?>
     <title><?= Html::encode($this->title) ?></title>
-    <?php $this->head() ?>
+    <?php
+    $this->head() ?>
 </head>
 <body class="d-flex flex-column h-100">
-<?php $this->beginBody() ?>
+<?php
+$this->beginBody() ?>
+
 
 <header class="page-header">
     <nav class="main-nav">
@@ -34,62 +43,41 @@ AppAsset::register($this);
         <div class="nav-wrapper">
             <ul class="nav-list">
                 <li class="list-item list-item--active">
-                    <a class="link link--nav" >Новое</a>
+                    <a class="link link--nav">Новое</a>
                 </li>
                 <li class="list-item">
-                    <a href="#" class="link link--nav" >Мои задания</a>
+                    <a href="#" class="link link--nav">Мои задания</a>
                 </li>
                 <li class="list-item">
-                    <a href="#" class="link link--nav" >Создать задание</a>
+                    <?= Html::a('Создать задание', ['tasks/add'], ['class' => 'link link--nav']) ?>
                 </li>
                 <li class="list-item">
-                    <a href="#" class="link link--nav" >Настройки</a>
+                    <a href="#" class="link link--nav">Настройки</a>
                 </li>
             </ul>
         </div>
     </nav>
-    <div class="user-block">
-        <a href="#">
-            <img class="user-photo" src="/img/man-glasses.png" width="55" height="55" alt="Аватар">
-        </a>
-        <div class="user-menu">
-            <p class="user-name">Василий</p>
-            <div class="popup-head">
-                <ul class="popup-menu">
-                    <li class="menu-item">
-                        <a href="#" class="link">Настройки</a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="#" class="link">Связаться с нами</a>
-                    </li>
-                    <li class="menu-item">
-                        <a href="#" class="link">Выход из системы</a>
-                    </li>
 
-                </ul>
-            </div>
-        </div>
-    </div>
+   <?= userBlock::widget()?>
 </header>
 
-<main role="main" class="flex-shrink-0">
-    <div class="container">
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
-        <?= Alert::widget() ?>
-        <?= $content ?>
-    </div>
-</main>
 
-<!--<footer class="footer mt-auto py-3 text-muted">
-    <div class="container">
-        <p class="float-left">&copy; My Company <?= date('Y') ?></p>
-        <p class="float-right"><?= Yii::powered() ?></p>
-    </div>
-</footer>
--->
-<?php $this->endBody() ?>
+<?= Breadcrumbs::widget([
+    'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+]) ?>
+<?= Alert::widget() ?>
+<?= $content ?>
+
+<!--<footer class="footer mt-auto py-3 text-muted">-->
+<!--    <div class="container">-->
+<!--        <p class="float-left">&copy; My Company --><?//= date('Y') ?><!--</p>-->
+<!--        <p class="float-right">--><?//= Yii::powered() ?><!--</p>-->
+<!--    </div>-->
+<!--</footer>-->
+
+<?php
+$this->endBody() ?>
 </body>
 </html>
-<?php $this->endPage() ?>
+<?php
+$this->endPage() ?>

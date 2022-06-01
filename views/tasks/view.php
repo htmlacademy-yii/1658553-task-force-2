@@ -3,9 +3,13 @@
 
 /* @var object $taskInfo */
 
+use yii\helpers\Html;
+
+
 ?>
 
 <main class="main-content container">
+
     <div class="left-column">
         <div class="head-wrapper">
             <h3 class="head-main"><?=$taskInfo->name?></h3>
@@ -21,30 +25,34 @@
 <!--        </div>-->
 
         <h4 class="head-regular">Отклики на задание</h4>
+        <?php foreach ($taskInfo->responses as $responses): ?>
         <div class="response-card">
-            <img class="customer-photo" src="../img/man-glasses.png" width="146" height="156" alt="Фото заказчиков">
+
+            <img class="customer-photo" src="<?=$responses->executor->file->path?>" width="146" height="156" alt="Фото
+            заказчиков">
+
             <div class="feedback-wrapper">
-                <a href="http://<?=$_SERVER['HTTP_HOST']?>/user/view/<?=rand(1,20)?>" class="link link--block
-                link--big">Астахов
-                    Павел</a>
+                <?= Html::a($responses->executor->login, ['/user/view','id'=>$responses->executor_id], ['class'=>'link link--block
+                link--big']) ?>
                 <div class="response-wrapper">
                     <div class="stars-rating small"><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span>&nbsp;</span></div>
-                    <p class="reviews">2 отзыва</p>
+                    <p class="reviews"> <?=count($responses->executor->reviews)?> отзыва</p>
                 </div>
                 <p class="response-message">
-                    Могу сделать всё в лучшем виде. У меня есть необходимый опыт и инструменты.
+                    <?=$responses->comment?>
                 </p>
 
             </div>
             <div class="feedback-wrapper">
-                <p class="info-text"><span class="current-time">25 минут </span>назад</p>
-                <p class="price price--small">3700 ₽</p>
+                <p class="info-text"><span class="current-time"><?=$responses->create_time?></span>назад</p>
+                <p class="price price--small"><?=$responses->price?></p>
             </div>
             <div class="button-popup">
                 <a href="#" class="button button--blue button--small">Принять</a>
                 <a href="#" class="button button--orange button--small">Отказать</a>
             </div>
         </div>
+        <?php endforeach; ?>
     </div>
     <div class="right-column">
         <div class="right-card black info-card">
@@ -60,19 +68,6 @@
                 <dd><?=$taskInfo->status?></dd>
             </dl>
         </div>
-<!--        <div class="right-card white file-card">-->
-<!--            <h4 class="head-card">Файлы задания</h4>-->
-<!--            <ul class="enumeration-list">-->
-<!--                <li class="enumeration-item">-->
-<!--                    <a href="#" class="link link--block link--clip">my_picture.jpg</a>-->
-<!--                    <p class="file-size">356 Кб</p>-->
-<!--                </li>-->
-<!--                <li class="enumeration-item">-->
-<!--                    <a href="#" class="link link--block link--clip">information.docx</a>-->
-<!--                    <p class="file-size">12 Кб</p>-->
-<!--                </li>-->
-<!--            </ul>-->
-<!--        </div>-->
     </div>
 </main>
 

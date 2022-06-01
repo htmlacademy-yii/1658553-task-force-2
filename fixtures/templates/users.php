@@ -12,7 +12,7 @@ return [
     'email' => $faker->unique()->email(),
     'login' => $faker->sentence($nbWords = 1, $variableNbWords = true),
     'password' => $faker->password(),
-    'avatar_file_id' => $faker->numberBetween(1,100),
+    'avatar_file_id' => $faker->numberBetween(1,2),
     'contact_telegram' => $faker->sentence($nbWords = 1, $variableNbWords = true),
     'contact_phone' => $faker->unique()->e164phoneNumber(1, 9),
     'city_id' => $faker->numberBetween(1,1087),

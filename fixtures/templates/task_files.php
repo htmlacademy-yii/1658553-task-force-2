@@ -8,7 +8,7 @@
 $faker = Faker\Factory::create('ru_RU');
 
 return [
-    'task_id' => $faker->numberBetween(1, 4),
-    'file_id' => $faker->numberBetween(1, 4),
+    'task_id' => $faker->numberBetween(1, 20),
+    'file_id' => $faker->numberBetween(1, 2),
 
 ];
