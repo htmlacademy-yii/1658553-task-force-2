@@ -15,6 +15,7 @@ services:
       - db
     volumes:
       - "./:/var/www/html"
+      - "./deploy/php/:/usr/local/etc/php"
 
 
 
