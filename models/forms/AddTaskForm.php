@@ -34,10 +34,10 @@ class AddTaskForm extends Model
             [
                 ['files'],
                 'file',
-                'extensions'     => ['png', 'jpg'],
                 'maxSize'        => 1024 * 1024 * 0.5,
-                'tooBig'         => 'Изображение слишком большое',
-                'wrongExtension' => 'Поддерживаемый формат jpg или png',
+                'maxFiles'       => 4,
+                'tooBig'         => 'файл слишком большой',
+
             ],
             [['name', 'info'], 'validateNameInfo'],
 

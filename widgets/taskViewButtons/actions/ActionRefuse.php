@@ -1,6 +1,6 @@
 <?php
 
-namespace taskforce\models;
+namespace app\widgets\taskViewButtons\actions;
 
 class ActionRefuse extends AbstractAction
 {
@@ -14,9 +14,9 @@ class ActionRefuse extends AbstractAction
 
 
 
-    public function isAvailable(Task $task, int $profileUser):bool
+    public function isAvailable(accessButtonsControl $task, int $profileUser):bool
     {
-        if ($task->status === Task::STATUS_IN_WORK && $task->executorId === $profileUser) {
+        if ($task->status === accessButtonsControl::STATUS_IN_WORK && $task->executorId === $profileUser) {
             return true;
         }
         return false;
