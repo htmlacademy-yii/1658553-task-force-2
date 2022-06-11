@@ -5,6 +5,7 @@ $db = require __DIR__.'/db.php';
 
 $config = [
     'id'         => 'basic',
+    'language' => 'ru-RU',
     'basePath'   => dirname(__DIR__),
     'bootstrap'  => ['log'],
     'aliases'    => [
@@ -56,6 +57,11 @@ $config = [
                 'tasks/view/<id:\d+>' => 'tasks/view',
                 'user/view/<id:\d+>'  => 'user/view',
                 'tasks/download/<fileId:\d+>' => 'tasks/download',
+                'tasks/cancel/<taskId:\d+>' => 'tasks/cancel',
+                'tasks/respond/<taskId:\d+>/<executorId:\d+>' => 'tasks/respond',
+                'tasks/refuse/<taskId:\d+>' => 'tasks/refuse',
+                'tasks/done/<taskId:\d+>' => 'tasks/done',
+                'tasks/rejected/<taskId:\d+>/<executorId:\d+>/<isRejected:\d+>' => 'tasks/rejected',
             ],
         ],
 

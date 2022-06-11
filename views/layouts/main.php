@@ -74,7 +74,7 @@ $this->beginBody() ?>
 <!--        <p class="float-right">--><?//= Yii::powered() ?><!--</p>-->
 <!--    </div>-->
 <!--</footer>-->
-
+<div class="overlay"></div>
 <?php
 $this->endBody() ?>
 </body>

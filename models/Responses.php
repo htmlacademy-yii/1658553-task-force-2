@@ -35,7 +35,8 @@ class Responses extends \yii\db\ActiveRecord
     {
         return [
             [['task_id', 'executor_id', 'price', 'comment', 'create_time'], 'required'],
-            [['task_id', 'executor_id', 'price', 'rejected'], 'integer'],
+            [['task_id', 'executor_id', 'price'], 'integer'],
+            [['rejected'],'boolean'],
             [['comment'], 'string'],
             [['create_time'], 'safe'],
             [['task_id'], 'exist', 'skipOnError' => true, 'targetClass' => Tasks::className(), 'targetAttribute' => ['task_id' => 'id']],
@@ -77,5 +78,9 @@ class Responses extends \yii\db\ActiveRecord
     public function getTask()
     {
         return $this->hasOne(Tasks::className(), ['id' => 'task_id']);
+    }
+    public function getId()
+    {
+        return $this->id;
     }
 }

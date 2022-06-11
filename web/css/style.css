@@ -1593,5 +1593,33 @@ form .has-error textarea:hover {
   justify-content: center;}
 
 
+.modal-response{
+  background-color: white;
+  position: fixed;
+  top: 100px;
+  width: 400px;
+  z-index: 30;
+  left: 50%;
+  margin-left: -180px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  display: none;
+}
+.modal-response textarea,input{
+  border-radius: 7px;
+}
+.form-modal-close{
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  width: 27px;
+  height: 27px;
+  font-size: 0;
+  background-color: #ffffff;
+  border: 0;
+  cursor: pointer;
+  background-image: url("../img/cross-big.png");
+}
 
 /*# sourceMappingURL=style.css.map */

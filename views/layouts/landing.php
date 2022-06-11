@@ -130,7 +130,7 @@ $this->beginPage() ?>
                 <div class="page-footer__copyright">
                     <a href="https://htmlacademy.ru">
                         <img class="copyright-logo"
-                             src="../imgcademy-logo.png"
+                             src="./img/academy-logo.png"
                              width="185" height="63"
                              alt="Логотип HTML Academy">
                     </a>
@@ -139,8 +139,7 @@ $this->beginPage() ?>
         </footer>
 
     </div>
-    <div class="overlay"></div>
-    <script src="../js/landing.js"></script>
+    <div class="overlay" id="overlays"></div>
     <?php
     $this->endBody() ?>
     </body>
