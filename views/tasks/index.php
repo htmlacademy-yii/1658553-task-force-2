@@ -40,35 +40,38 @@ use yii\widgets\ActiveForm;
         endforeach ?>
 
 
-        <div class="pagination-wrapper">
-
-            <?= \yii\widgets\LinkPager::widget([
-                'pagination'           => $pages,
-                'activePageCssClass'   =>
-                    'pagination-item--active',
-                'options' => ['class'=>'pagination-list'],
-                'linkOptions' => ['class'=>'link link--page'],
-                'linkContainerOptions' => ['class'=>'pagination-item'],
-                'prevPageLabel' => false,
-                'nextPageLabel' => false,
-                'prevPageCssClass' => 'mark',
-                'nextPageCssClass' => 'mark'
-
-
-            ]) ?>
-
-
-        </div>
+        <?php if ($pages->getPageCount() > 1) : ?>
+            <div class="pagination-wrapper">
+                <ul class="pagination-list">
+                    <li class="pagination-item mark">
+                        <a class="link link--page"
+                           href=<?= '/tasks/' . ($pages->getPage() > 0 ? $pages->getPage() : '#') ?>
+                        ></a>
+                    </li>
+                    <?php for ($page = 1; $page <= $pages->getPageCount(); $page++) : ?>
+                        <li class="pagination-item
+                    <?= ($page === $pages->getPage() + 1) ? 'pagination-item--active' : '' ?>">
+                            <a class="link link--page" href=<?= '/tasks/' . $page ?>><?= $page ?></a>
+                        </li>
+                    <?php endfor; ?>
+                    <li class="pagination-item mark">
+                        <a class="link link--page href=<?= '/tasks/' .
+                        ($pages->getPage() < $pages->getPageCount() - 1 ? $pages->getPage() + 2 : '#') ?>
+                           "></a>
+                    </li>
+                </ul>
+            </div>
+        <?php endif; ?>
     </div>
     <div class="right-column">
         <div class="right-card black">
             <div class="search-form">
                 <?php
                 $form = ActiveForm::begin([
-                    'id'          => 'filter-form',
+                    'id' => 'filter-form',
                     'fieldConfig' => [
-                        'template'     => "{input}\n{label}",
-                        'options'      => ['class' => 'form-group'],
+                        'template' => "{input}\n{label}",
+                        'options' => ['class' => 'form-group'],
                         'labelOptions' => ['class' => 'control-label'],
                     ],
                 ]); ?>
@@ -80,7 +83,7 @@ use yii\widgets\ActiveForm;
                             TaskFilterForm::getCategories(),
                             [
                                 'separator' => '<br>',
-                                'checked'   => true,
+                                'checked' => true,
                             ]
                         )->label(false) ?>
                     </div>

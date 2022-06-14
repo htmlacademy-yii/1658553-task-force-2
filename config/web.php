@@ -64,7 +64,9 @@ $config = [
                 'tasks/refuse/<taskId:\d+>' => 'tasks/refuse',
                 'tasks/done/<taskId:\d+>' => 'tasks/done',
                 'tasks/rejected/<taskId:\d+>/<executorId:\d+>/<isRejected:\d+>' => 'tasks/rejected',
-                'tasks/page/<page:\d+>' => 'tasks/index',
+                'tasks/<page:\d+>' => 'tasks/index',
+
+
 
             ],
         ],

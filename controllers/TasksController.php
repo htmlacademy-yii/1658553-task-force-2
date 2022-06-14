@@ -57,11 +57,7 @@ class TasksController extends \yii\web\Controller
 
         $query = $taskSearchService->search($taskFilterForm);
         $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count(),'pageSize'=>5,'forcePageParam' => false, 'pageSizeParam' => false,'params'=>false]);
-
-        var_dump($pages->links);
-
-
+        $pages = new Pagination(['totalCount' => $countQuery->count(),'pageSize'=>5,'forcePageParam' => false, 'pageSizeParam' => false,]);
         $tasks = $query->offset($pages->offset)->limit($pages->limit)->all();
 
 
