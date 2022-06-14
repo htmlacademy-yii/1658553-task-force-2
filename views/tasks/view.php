@@ -7,10 +7,14 @@
 /* @var object $responses */
 
 /* @var object $responseForm */
+/* @var object $doneForm */
 
+use app\widgets\responseCard\responseBlock;
 use app\widgets\taskFiles\fileCard;
 use app\widgets\taskViewButtons\buttonsBlock;
 use yii\helpers\Html;
+use app\models\Tasks;
+
 
 ?>
 
@@ -23,7 +27,7 @@ use yii\helpers\Html;
         </div>
         <p class="task-description">
             <?= $taskInfo->info ?></p>
-        <?= buttonsBlock::widget(['taskId' => $taskInfo->id, 'responseForm' => $responseForm]) ?>
+        <?= buttonsBlock::widget(['taskId' => $taskInfo->id, 'responseForm' => $responseForm,'doneForm'=>$doneForm]) ?>
 
 
         <!--        <div class="task-map">-->
@@ -32,65 +36,8 @@ use yii\helpers\Html;
         <!--            <p class="map-address">Новый арбат, 23, к. 1</p>-->
         <!--        </div>-->
 
-        <h4 class="head-regular">Отклики на задание</h4>
-        <?php
-        foreach ($responses as $response): ?>
-            <div class="response-card">
 
-                <img class="customer-photo" src="<?= $response->executor->file->path ?>" width="146" height="156" alt="Фото
-            заказчиков">
-
-                <div class="feedback-wrapper">
-                    <?= Html::a($response->executor->login, ['/user/view', 'id' => $response->executor_id], [
-                        'class' => 'link link--block
-                link--big',
-                    ]) ?>
-                    <div class="response-wrapper">
-                        <div class="stars-rating small"><span class="fill-star">&nbsp;</span><span
-                                    class="fill-star">&nbsp;</span><span
-                                    class="fill-star">&nbsp;</span><span
-                                    class="fill-star">&nbsp;</span><span>&nbsp;</span></div>
-                        <p class="reviews"> <?= count($response->executor->reviews) ?> отзыва</p>
-                    </div>
-                    <p class="response-message">
-                        <?= $response->comment ?>
-                    </p>
-
-                </div>
-
-                <div class="feedback-wrapper">
-                    <p class="info-text"><span class="current-time"><?= $response->create_time ?></span>назад</p>
-                    <p class="price price--small"><?= $response->price ?></p>
-                </div>
-                <?php
-                if ($taskInfo->customer_id === Yii::$app->user->id): ?>
-                    <div class="button-popup">
-                        <?= Html::a('Принять', [
-                            'tasks/rejected',
-                            'taskId'     => $taskInfo->id,
-                            'executorId' =>
-                                $response->executor_id,
-                            'isRejected' => false,
-                        ], [
-                            'class'
-                            => 'button button--blue button--small',
-                        ]) ?>
-                        <?= Html::a('Отказать', [
-                            'tasks/rejected',
-                            'taskId'     => $taskInfo->id,
-                            'executorId' =>
-                                $response->executor_id,
-                            'isRejected' => true,
-                        ], [
-                            'class' => 'button button--orange 
-                        button--small',
-                        ]); ?>
-                    </div>
-                <?php
-                endif; ?>
-            </div>
-        <?php
-        endforeach; ?>
+        <?=responseBlock::widget(['responses'=>$responses,'taskInfo' => $taskInfo])?>
     </div>
     <div class="right-column">
         <div class="right-card black info-card">
@@ -104,7 +51,7 @@ use yii\helpers\Html;
                 <dt>Срок выполнения</dt>
                 <dd><?= $taskInfo->deadline_time ?></dd>
                 <dt>Статус</dt>
-                <dd><?= \app\models\Tasks::getStatusLabel($taskInfo->status) ?></dd>
+                <dd><?= Tasks::getStatusLabel($taskInfo->status) ?></dd>
             </dl>
         </div>
         <?= fileCard::widget(['taskId' => $taskInfo->id]) ?>

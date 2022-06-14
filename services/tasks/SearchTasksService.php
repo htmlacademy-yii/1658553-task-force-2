@@ -5,11 +5,17 @@ namespace app\services\tasks;
 
 use app\models\forms\TaskFilterForm;
 use app\models\Tasks;
+use app\models\Users;
+use Codeception\Module\Yii2;
 
 class SearchTasksService
 {
     public function search(TaskFilterForm $taskFilterForm)
     {
+        $userId = \Yii::$app->user->id;
+        $user = Users::find()->where("id = $userId")->one();
+
+
         $query = Tasks::find();
 
         /** Проверка на чекбокс 'без исполнителя' */
@@ -22,13 +28,13 @@ class SearchTasksService
         if ($taskFilterForm->isRemote) {
             $query = $query->andWhere('city_id IS NOT NULL');
         } else {
-            /**  689 город для проверки, потом в значение будет попадать город пользователя из $_SESSION */
-            $query = $query->andWhere(['city_id' => '689']);
+
+            $query = $query->andWhere(['city_id' => "$user->city_id"]);
         }
 
-        $query = $query->andWhere(['category_id' => $taskFilterForm->categoryIds]);
 
 
-        return $query->all();
+
+        return  $query->andWhere(['category_id' => $taskFilterForm->categoryIds]);
     }
 }

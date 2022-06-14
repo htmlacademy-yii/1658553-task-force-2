@@ -51,8 +51,10 @@ $config = [
         'db'           => $db,
 
         'urlManager' => [
+
             'enablePrettyUrl' => true,
             'showScriptName'  => false,
+
             'rules'           => [
                 'tasks/view/<id:\d+>' => 'tasks/view',
                 'user/view/<id:\d+>'  => 'user/view',
@@ -62,11 +64,15 @@ $config = [
                 'tasks/refuse/<taskId:\d+>' => 'tasks/refuse',
                 'tasks/done/<taskId:\d+>' => 'tasks/done',
                 'tasks/rejected/<taskId:\d+>/<executorId:\d+>/<isRejected:\d+>' => 'tasks/rejected',
+                'tasks/page/<page:\d+>' => 'tasks/index',
+
             ],
         ],
 
+
     ],
     'params'     => $params,
+
 ];
 
 if (YII_ENV_DEV) {

@@ -1593,7 +1593,7 @@ form .has-error textarea:hover {
   justify-content: center;}
 
 
-.modal-response{
+.modal-response, .modal-done, .modal-refuse {
   background-color: white;
   position: fixed;
   top: 100px;
@@ -1606,9 +1606,11 @@ form .has-error textarea:hover {
   padding-bottom: 20px;
   display: none;
 }
-.modal-response textarea,input{
+
+.modal-response .modal-done .modal-refuse textarea,input{
   border-radius: 7px;
 }
+
 .form-modal-close{
   position: absolute;
   top: 15px;

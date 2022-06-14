@@ -5,6 +5,9 @@
 
 /* @var object $taskFilterForm */
 
+/* @var object $pages */
+
+use app\models\forms\TaskFilterForm;
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -17,8 +20,10 @@ use yii\widgets\ActiveForm;
         foreach ($taskInfo as $task): ?>
             <div class="task-card">
                 <div class="header-task">
-                    <?= Html::a($task->name, ['/tasks/view','id'=>$task->id], ['class'=>'link link--block 
-                    link--big']) ?>
+                    <?= Html::a($task->name, ['/tasks/view', 'id' => $task->id], [
+                        'class' => 'link link--block 
+                    link--big',
+                    ]) ?>
                     <p class="price price--task"><?= $task->price ?> ₽</p>
                 </div>
                 <p class="info-text"><span class="current-time"><?= $task->create_time ?> </span>назад</p>
@@ -34,24 +39,25 @@ use yii\widgets\ActiveForm;
         <?php
         endforeach ?>
 
+
         <div class="pagination-wrapper">
-            <ul class="pagination-list">
-                <li class="pagination-item mark">
-                    <a href="#" class="link link--page"></a>
-                </li>
-                <li class="pagination-item">
-                    <a href="#" class="link link--page">1</a>
-                </li>
-                <li class="pagination-item pagination-item--active">
-                    <a href="#" class="link link--page">2</a>
-                </li>
-                <li class="pagination-item">
-                    <a href="#" class="link link--page">3</a>
-                </li>
-                <li class="pagination-item mark">
-                    <a href="#" class="link link--page"></a>
-                </li>
-            </ul>
+
+            <?= \yii\widgets\LinkPager::widget([
+                'pagination'           => $pages,
+                'activePageCssClass'   =>
+                    'pagination-item--active',
+                'options' => ['class'=>'pagination-list'],
+                'linkOptions' => ['class'=>'link link--page'],
+                'linkContainerOptions' => ['class'=>'pagination-item'],
+                'prevPageLabel' => false,
+                'nextPageLabel' => false,
+                'prevPageCssClass' => 'mark',
+                'nextPageCssClass' => 'mark'
+
+
+            ]) ?>
+
+
         </div>
     </div>
     <div class="right-column">
@@ -71,22 +77,23 @@ use yii\widgets\ActiveForm;
                     <div>
                         <?= $form->field($taskFilterForm, 'categoryIds')->checkboxList
                         (
-                            \app\models\forms\TaskFilterForm::getCategories(),
-                            ['separator'=>'<br>',
-                                'checked'=>true,
-                                ]
+                            TaskFilterForm::getCategories(),
+                            [
+                                'separator' => '<br>',
+                                'checked'   => true,
+                            ]
                         )->label(false) ?>
                     </div>
                     <h4 class="head-card">Дополнительно</h4>
                     <div class="form-group">
 
                         <?= $form->field($taskFilterForm, 'isNoExecutor')->checkbox(
-                            $options = ['checked'=>!empty($taskFilterForm->isNoExecutor)],
+                            $options = ['checked' => !empty($taskFilterForm->isNoExecutor)],
                             $enclosedByLabel = false
                         )->label('Без исполнителя'); ?>
 
                         <?= $form->field($taskFilterForm, 'isRemote')->checkbox(
-                            $options = ['checked'=>!empty($taskFilterForm->isRemote)],
+                            $options = ['checked' => !empty($taskFilterForm->isRemote)],
                             $enclosedByLabel = false
 
                         )->label('Удаленно'); ?>
@@ -97,10 +104,10 @@ use yii\widgets\ActiveForm;
                     <div class="form-group">
                         <?= $form->field($taskFilterForm, 'interval')->dropDownList
                         (
-                            \app\models\forms\TaskFilterForm::getInterval()
+                            TaskFilterForm::getInterval()
                         )->label(false) ?>
                     </div>
-                    <?= \yii\helpers\Html::submitButton('Искать', ['class' => 'button button--blue']); ?>
+                    <?= Html::submitButton('Искать', ['class' => 'button button--blue']); ?>
                     <?php
                     ActiveForm::end(); ?>
                 </div>

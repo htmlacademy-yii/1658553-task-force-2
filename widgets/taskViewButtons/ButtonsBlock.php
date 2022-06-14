@@ -8,8 +8,9 @@ use yii\base\Widget;
 
 class buttonsBlock extends Widget
 {
-    public $taskId;
+    public int $taskId;
     public object $responseForm;
+    public object $doneForm;
 
 
     /**
@@ -17,7 +18,6 @@ class buttonsBlock extends Widget
      */
     public function run()
     {
-        $responseForm = $this->responseForm;
 
         $task = Tasks::find()->where("id = $this->taskId")->one();
 
@@ -25,6 +25,6 @@ class buttonsBlock extends Widget
 
 
 
-        return $this->render('buttonsBlock',['taskControl'=>$taskControl,'responseForm'=>$responseForm]);
+        return $this->render('buttonsBlock',['taskControl'=>$taskControl,'responseForm'=>$this->responseForm,'doneForm'=>$this->doneForm]);
     }
 }

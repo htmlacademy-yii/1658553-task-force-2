@@ -1,7 +1,7 @@
 {
-    let modal = document.getElementById('modalResponse');
-    let btn = document.getElementById('btnShowResponse');
-    let close = document.getElementById("formModalCloseResponse");
+    let modal = document.getElementById('modalRefuse');
+    let btn = document.getElementById('btnShowRefuse');
+    let close = document.getElementById("formModalCloseRefuse");
     let overlay = document.getElementsByClassName("overlay")[0]
 
 
@@ -19,6 +19,3 @@
 
     }
 }
-
-
-

@@ -4,6 +4,7 @@ namespace app\services\tasks;
 
 use app\models\forms\AddResponseForm;
 use app\models\Responses;
+use app\models\Tasks;
 use Yii;
 
 class ResponseTaskService
@@ -23,11 +24,22 @@ class ResponseTaskService
     public function getResponses(int $taskId)
     {
         $responses = Responses::find()->where("task_id = $taskId")->andWhere(["rejected" => false])->all();
+
         return $responses;
     }
-    public function toDoRejected(int $taskId, int $executorId){
+
+    public function getResponse(int $taskId)
+    {
+        $taskInfo = Tasks::find()->where("id = $taskId")->one();
+
+        return Responses::find()->where("task_id = $taskId")->andWhere("executor_id = $taskInfo->executor_id")->all();
+    }
+
+    public function toDoRejected(int $taskId, int $executorId)
+    {
         $responses = Responses::find()->where("task_id = $taskId")->andWhere(["executor_id" => $executorId])->one();
         $responses->rejected = true;
         $responses->save();
     }
+
 }

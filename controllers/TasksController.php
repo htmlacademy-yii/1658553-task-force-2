@@ -3,6 +3,7 @@
 namespace app\controllers;
 
 use app\models\Files;
+use app\models\forms\AddDoneForm;
 use app\models\forms\AddResponseForm;
 use app\models\forms\AddTaskForm;
 use app\models\forms\TaskFilterForm;
@@ -11,7 +12,10 @@ use app\services\tasks\AddTaskService;
 use app\services\tasks\ChangeStatusTaskService;
 use app\services\tasks\ResponseTaskService;
 use app\services\tasks\SearchTasksService;
+use app\services\user\ReviewsUserService;
+use app\widgets\taskViewButtons\actions\AccessButtonsControl;
 use Yii;
+use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
@@ -50,9 +54,18 @@ class TasksController extends \yii\web\Controller
 
         $taskFilterForm->load(Yii::$app->request->post());
         $taskSearchService = new SearchTasksService();
-        $tasks = $taskSearchService->search($taskFilterForm);
 
-        return $this->render('index', ['taskInfo' => $tasks, 'taskFilterForm' => $taskFilterForm]
+        $query = $taskSearchService->search($taskFilterForm);
+        $countQuery = clone $query;
+        $pages = new Pagination(['totalCount' => $countQuery->count(),'pageSize'=>5,'forcePageParam' => false, 'pageSizeParam' => false,'params'=>false]);
+
+        var_dump($pages->links);
+
+
+        $tasks = $query->offset($pages->offset)->limit($pages->limit)->all();
+
+
+        return $this->render('index', ['taskInfo' => $tasks, 'taskFilterForm' => $taskFilterForm,'pages'=>$pages]
         );
     }
 
@@ -64,20 +77,45 @@ class TasksController extends \yii\web\Controller
         if (!$taskInfo) {
             throw new NotFoundHttpException('Задание не найдено');
         }
-        $responseForm = new AddResponseForm();
-        $responseForm->load(Yii::$app->request->post());
         $response = new ResponseTaskService();
-        $responses = $response->getResponses($id);
-        if ($responseForm->validate()) {
-            $response->addResponse($responseForm, $id);
+        $responseForm = new AddResponseForm();
 
-            return Yii::$app->response->redirect(["tasks/view/$id"]);
+        $doneForm = new AddDoneForm();
+        $doneService = new ReviewsUserService();
+
+        if (Yii::$app->request->post()) {
+            if (Yii::$app->request->post('AddResponseForm')) {
+                //логика добавления отклика на задание
+
+                $responseForm->load(Yii::$app->request->post());
+                if ($responseForm->validate()) {
+                    $response->addResponse($responseForm, $id);
+
+                    return Yii::$app->response->redirect(["tasks/view/$id"]);
+                }
+            } elseif (Yii::$app->request->post('AddDoneForm')) {
+                //логика добавления отзыва на задание
+                $doneForm->load(Yii::$app->request->post());
+                if ($doneForm->validate()) {
+                    $doneService->addReviews($doneForm, $id);
+
+                    return Yii::$app->response->redirect(["tasks/done/$id"]);
+                }
+            }
+        }
+
+
+        //логика списка откликов на задание
+        if ((string)$taskInfo->status !== accessButtonsControl::STATUS_NEW) {
+            $responses = $response->getResponse($id);
+        } else {
+            $responses = $response->getResponses($id);
         }
 
 
         return $this->render(
             'view',
-            ['taskInfo' => $taskInfo, 'responseForm' => $responseForm, 'responses' => $responses]
+            ['taskInfo' => $taskInfo, 'responseForm' => $responseForm, 'responses' => $responses,'doneForm'=>$doneForm]
         );
     }
 
