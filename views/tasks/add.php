@@ -14,9 +14,9 @@ use yii\widgets\ActiveForm;
         <?php
         $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
 
-        <?= $form->field($addTaskForm, 'name')->textInput()
+        <?= $form->field($addTaskForm, 'name',['enableAjaxValidation' => true])->textInput()
         ?>
-        <?= $form->field($addTaskForm, 'info')->textarea()
+        <?= $form->field($addTaskForm, 'info',['enableAjaxValidation' => true])->textarea()
         ?>
         <?= $form->field($addTaskForm, 'category_id')->dropDownList(\app\models\forms\AddTaskForm::getCategory())
         ?>
@@ -25,7 +25,7 @@ use yii\widgets\ActiveForm;
         <div class="half-wrapper">
             <?= $form->field($addTaskForm, 'price')->textInput()
             ?>
-            <?= $form->field($addTaskForm, 'deadline_time')->textInput(['type' => 'date'])
+            <?= $form->field($addTaskForm, 'deadline_time',['enableAjaxValidation' => true])->textInput(['type' => 'date'])
             ?>
         </div>
         <?= $form->field($addTaskForm, 'files[]')->fileInput(['multiple' => true]) ?>

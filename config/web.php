@@ -5,7 +5,7 @@ $db = require __DIR__.'/db.php';
 
 $config = [
     'id'         => 'basic',
-    'language' => 'ru-RU',
+    'language'   => 'ru-RU',
     'basePath'   => dirname(__DIR__),
     'bootstrap'  => ['log'],
     'aliases'    => [
@@ -55,17 +55,16 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName'  => false,
 
-            'rules'           => [
-                'tasks/view/<id:\d+>' => 'tasks/view',
-                'user/view/<id:\d+>'  => 'user/view',
-                'tasks/download/<fileId:\d+>' => 'tasks/download',
-                'tasks/cancel/<taskId:\d+>' => 'tasks/cancel',
-                'tasks/respond/<taskId:\d+>/<executorId:\d+>' => 'tasks/respond',
-                'tasks/refuse/<taskId:\d+>' => 'tasks/refuse',
-                'tasks/done/<taskId:\d+>' => 'tasks/done',
+            'rules' => [
+                'tasks/view/<id:\d+>'                                           => 'tasks/view',
+                'user/view/<id:\d+>'                                            => 'user/view',
+                'tasks/download/<fileId:\d+>'                                   => 'tasks/download',
+                'tasks/cancel/<taskId:\d+>'                                     => 'tasks/cancel',
+                'tasks/respond/<taskId:\d+>/<executorId:\d+>'                   => 'tasks/respond',
+                'tasks/refuse/<taskId:\d+>'                                     => 'tasks/refuse',
+                'tasks/done/<taskId:\d+>'                                       => 'tasks/done',
                 'tasks/rejected/<taskId:\d+>/<executorId:\d+>/<isRejected:\d+>' => 'tasks/rejected',
-                'tasks/<page:\d+>' => 'tasks/index',
-
+                'tasks/page/<page:\d+>'                                         => 'tasks/index',
 
 
             ],
@@ -81,14 +80,14 @@ if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment
     $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
-        'class' => 'yii\debug\Module',
+        'class'      => 'yii\debug\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
         'allowedIPs' => ['*', '::1'],
     ];
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
-        'class' => 'yii\gii\Module',
+        'class'      => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
         'allowedIPs' => ['*', '::1'],
     ];

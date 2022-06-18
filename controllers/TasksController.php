@@ -7,6 +7,7 @@ use app\models\forms\AddDoneForm;
 use app\models\forms\AddResponseForm;
 use app\models\forms\AddTaskForm;
 use app\models\forms\TaskFilterForm;
+use app\models\Reviews;
 use app\models\Tasks;
 use app\services\tasks\AddTaskService;
 use app\services\tasks\ChangeStatusTaskService;
@@ -18,7 +19,9 @@ use Yii;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\web\NotFoundHttpException;
+use yii\web\Response;
 use yii\web\UploadedFile;
+use yii\widgets\ActiveForm;
 
 class TasksController extends \yii\web\Controller
 {
@@ -50,18 +53,26 @@ class TasksController extends \yii\web\Controller
     //список заданий и фильтры
     public function actionIndex()
     {
+
         $taskFilterForm = new TaskFilterForm();
 
-        $taskFilterForm->load(Yii::$app->request->post());
+        $taskFilterForm->load(Yii::$app->request->get());
         $taskSearchService = new SearchTasksService();
-
         $query = $taskSearchService->search($taskFilterForm);
+
         $countQuery = clone $query;
-        $pages = new Pagination(['totalCount' => $countQuery->count(),'pageSize'=>5,'forcePageParam' => false, 'pageSizeParam' => false,]);
-        $tasks = $query->offset($pages->offset)->limit($pages->limit)->all();
+        $pages = new Pagination(
+            [
+                'totalCount'     => $countQuery->count(),
+                'pageSize'       => 5,
+                'forcePageParam' => false,
+                'pageSizeParam'  => false,
+            ]
+        );
+        $tasks = $countQuery->offset($pages->offset)->limit($pages->limit)->all();
 
 
-        return $this->render('index', ['taskInfo' => $tasks, 'taskFilterForm' => $taskFilterForm,'pages'=>$pages]
+        return $this->render('index', ['taskInfo' => $tasks, 'taskFilterForm' => $taskFilterForm, 'pages' => $pages]
         );
     }
 
@@ -111,7 +122,12 @@ class TasksController extends \yii\web\Controller
 
         return $this->render(
             'view',
-            ['taskInfo' => $taskInfo, 'responseForm' => $responseForm, 'responses' => $responses,'doneForm'=>$doneForm]
+            [
+                'taskInfo'     => $taskInfo,
+                'responseForm' => $responseForm,
+                'responses'    => $responses,
+                'doneForm'     => $doneForm,
+            ]
         );
     }
 
@@ -122,10 +138,17 @@ class TasksController extends \yii\web\Controller
     {
         $addTaskForm = new AddTaskForm();
         $addTaskForm->load(Yii::$app->request->post());
+        if (Yii::$app->request->isAjax) {
+            Yii::$app->response->format = Response::FORMAT_JSON;
+
+            return ActiveForm::validate($addTaskForm);
+        }
+
         if ($addTaskForm->validate()) {
             $addTaskForm->files = UploadedFile::getInstances($addTaskForm, 'files');
             $addTask = new AddTaskService();
             $newTaskId = $addTask->addTask($addTaskForm);
+
 
             return Yii::$app->response->redirect(["tasks/view/$newTaskId"]);
         }
@@ -152,6 +175,7 @@ class TasksController extends \yii\web\Controller
     {
         $doneTask = new ChangeStatusTaskService($taskId);
         $doneTask->done();
+        $doneTask->updateRating();
 
         return Yii::$app->response->redirect(["tasks/view/$taskId"]);
     }
@@ -160,6 +184,7 @@ class TasksController extends \yii\web\Controller
     {
         $refuseTask = new ChangeStatusTaskService($taskId);
         $refuseTask->refuse();
+        $refuseTask->updateRating();
 
         return Yii::$app->response->redirect(["tasks/view/$taskId"]);
     }

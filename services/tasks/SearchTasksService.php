@@ -33,8 +33,6 @@ class SearchTasksService
         }
 
 
-
-
         return  $query->andWhere(['category_id' => $taskFilterForm->categoryIds]);
     }
 }

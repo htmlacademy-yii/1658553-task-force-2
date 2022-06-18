@@ -16,6 +16,16 @@ class TaskFilterForm extends Model
     public $isRemote;
     public $interval;
 
+    public $translation;
+    public $clean;
+    public $cargo;
+    public $neo;
+    public $flat;
+    public $repair;
+    public $beauty;
+    public $photo;
+
+
     /**
      * @return string[] Названия полей формы
      */
@@ -36,7 +46,23 @@ class TaskFilterForm extends Model
     public function rules(): array
     {
         return [
-            [['categoryIds', 'isNoExecutor', 'isRemote', 'interval'], 'safe'],
+            [
+                [
+                    'categoryIds',
+                    'isNoExecutor',
+                    'isRemote',
+                    'interval',
+                    'translation',
+                    'clean',
+                    'cargo',
+                    'neo',
+                    'flat',
+                    'repair',
+                    'beauty',
+                    'photo',
+                ],
+                'safe',
+            ],
         ];
     }
 
@@ -51,7 +77,7 @@ class TaskFilterForm extends Model
         $categories = Categories::find()->all();
         $categoriesData = [];
         foreach ($categories as $category) {
-            $categoriesData[$category->id] = $category->name;
+            $categoriesData[$category->icon] =  $category->name;
         }
 
         return $categoriesData;
@@ -69,5 +95,10 @@ class TaskFilterForm extends Model
         $interval[self::INTERVAL_24_HOURS] = '24 часа';
 
         return $interval;
+    }
+
+    public function formName()
+    {
+        return '';
     }
 }

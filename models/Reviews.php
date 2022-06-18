@@ -65,4 +65,8 @@ class Reviews extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Tasks::className(), ['id' => 'task_id']);
     }
+    public function getUsers()
+    {
+        return $this->hasOne(Users::className(), ['id' => 'customer_id']);
+    }
 }

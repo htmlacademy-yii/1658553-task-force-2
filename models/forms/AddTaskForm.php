@@ -40,6 +40,7 @@ class AddTaskForm extends Model
 
             ],
             [['name', 'info'], 'validateNameInfo'],
+            [['deadline_time'],'validateDate'],
 
 
         ];
@@ -110,6 +111,13 @@ class AddTaskForm extends Model
         if (!empty($this->info) && (mb_strlen(str_replace(' ', '', $this->info)) > 450)) {
             $errorMsg = 'Не пробельных символов должно быть не менее 30 и не более 450';
             $this->addError('info', $errorMsg);
+        }
+    }
+    public function validateDate()
+    {
+        if ($this->deadline_time < date('Y-m-d')){
+            $errorMsg = 'Дата не может быть раньше текущего дня.';
+            $this->addError('deadline_time', $errorMsg);
         }
     }
 

@@ -49,7 +49,7 @@ use app\models\Tasks;
 
                 <dd><?= Yii::$app->formatter->asDate($taskInfo->create_time) ?></dd>
                 <dt>Срок выполнения</dt>
-                <dd><?= $taskInfo->deadline_time ?></dd>
+                <dd><?= Yii::$app->formatter->asDate($taskInfo->deadline_time) ?></dd>
                 <dt>Статус</dt>
                 <dd><?= Tasks::getStatusLabel($taskInfo->status) ?></dd>
             </dl>

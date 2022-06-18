@@ -34,7 +34,7 @@ class Responses extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['task_id', 'executor_id', 'price', 'comment', 'create_time'], 'required'],
+            [['task_id', 'executor_id',  'create_time'], 'required'],
             [['task_id', 'executor_id', 'price'], 'integer'],
             [['rejected'],'boolean'],
             [['comment'], 'string'],

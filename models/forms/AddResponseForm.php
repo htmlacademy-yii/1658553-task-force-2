@@ -12,7 +12,7 @@ class AddResponseForm extends Model
     public function rules()
     {
         return [
-            [['price', 'comment'], 'required', 'message' => 'поле должно быть заполнено'],
+            [['price', 'comment'], 'safe', 'message' => 'поле должно быть заполнено'],
             [
                 ['price'],
                 'integer',

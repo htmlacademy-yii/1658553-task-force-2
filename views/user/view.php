@@ -18,7 +18,7 @@ use yii\helpers\Html;
                     <div class="stars-rating big"><span class="fill-star">&nbsp;</span><span
                                 class="fill-star">&nbsp;</span><span class="fill-star">&nbsp;</span><span
                                 class="fill-star">&nbsp;</span><span>&nbsp;</span></div>
-                    <span class="current-rate"><?= $userInfo->rating ?>></span>
+                    <span class="current-rate"><?= $userInfo->rating ?></span>
                 </div>
             </div>
             <p class="user-description">
@@ -38,6 +38,7 @@ use yii\helpers\Html;
                     endforeach; ?>
                 </ul>
             </div>
+
             <div class="bio">
                 <p class="head-info">Био</p>
                 <p class="bio-info"><span class="country-info">Россия</span>, <span
@@ -48,8 +49,11 @@ use yii\helpers\Html;
         <h4 class="head-regular">Отзывы заказчиков</h4>
         <?php
         foreach ($userInfo->reviews as $userReviews): ?>
+
             <div class="response-card">
-                <img class="customer-photo" src="../img/man-coat.png" width="120" height="127" alt="Фото заказчиков">
+                <img class="customer-photo" src="<?= $userReviews->users->file->path ?>" width="120"
+                     height="127"
+                     alt="Фото заказчиков">
                 <div class="feedback-wrapper">
                     <p class="feedback"><?= $userReviews->comment ?></p>
                     <p class="task">Задание «<?= Html::a($userReviews->tasks->name, ['/tasks/view/','id'=>$userReviews->tasks
@@ -77,7 +81,7 @@ use yii\helpers\Html;
                 <dt>Место в рейтинге</dt>
                 <dd><?= $userInfo->rating ?></dd>
                 <dt>Дата регистрации</dt>
-                <dd><?= $userInfo->create_date ?></dd>
+                <dd><?= Yii::$app->formatter->asDate($userInfo->create_date) ?></dd>
                 <dt>Статус</dt>
                 <dd><?= $userInfo->status ?></dd>
             </dl>
@@ -85,15 +89,19 @@ use yii\helpers\Html;
         <div class="right-card white">
             <h4 class="head-card">Контакты</h4>
             <ul class="enumeration-list">
+                <?php if ($userInfo->contact_phone):?>
                 <li class="enumeration-item">
                     <a href="#" class="link link--block link--phone"><?= $userInfo->contact_phone ?></a>
                 </li>
+                <?php endif;?>
                 <li class="enumeration-item">
                     <a href="#" class="link link--block link--email"><?= $userInfo->email ?></a>
                 </li>
+                <?php if ($userInfo->contact_telegram):?>
                 <li class="enumeration-item">
                     <a href="#" class="link link--block link--tg">@<?= $userInfo->contact_telegram ?></a>
                 </li>
+                <?php endif;?>
             </ul>
         </div>
     </div>

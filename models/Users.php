@@ -19,15 +19,17 @@ use yii\web\IdentityInterface;
  * @property int $city_id
  * @property string|null $birthday
  * @property string|null $info
- * @property int|null $rating
+ * @property float|null $rating
  * @property int|null $status
-
  *
  * @property Cities $city
  * @property Responses[] $responses
  * @property Tasks[] $tasks
  * @property Tasks[] $tasks0
  * @property UserCategories[] $userCategories
+ * @property string $USER                [char(32)]
+ * @property int    $CURRENT_CONNECTIONS [bigint]
+ * @property int    $TOTAL_CONNECTIONS   [bigint]
  */
 class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
 {
@@ -48,12 +50,13 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         return [
             [['create_date', 'email', 'login', 'password', 'city_id'], 'required'],
             [['create_date', 'birthday'], 'safe'],
-            [['avatar_file_id', 'city_id', 'rating', 'status'], 'integer'],
+            [['avatar_file_id', 'city_id', 'status'], 'integer'],
+            [['rating'],'number'],
             [['info'], 'string'],
             [['email', 'login'], 'string', 'max' => 128],
             [['password'], 'string', 'max' => 64],
             [['contact_telegram'], 'string', 'max' => 24],
-            [['contact_phone'], 'string', 'max' => 11],
+            [['contact_phone'], 'string', 'max' => 20],
             [['email'], 'unique'],
             [['email'],'email'],
             [['city_id'], 'exist', 'skipOnError' => true, 'targetClass' => Cities::className(), 'targetAttribute' => ['city_id' => 'id']],

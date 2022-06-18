@@ -14,6 +14,9 @@ use yii\widgets\ActiveForm;
 
 ?>
 <main class="main-content container">
+    <?php
+    \yii\widgets\Pjax::begin(['timeout' => 3000]); ?>
+
     <div class="left-column">
         <h3 class="head-main head-task">Новые задания</h3>
         <?php
@@ -26,7 +29,9 @@ use yii\widgets\ActiveForm;
                     ]) ?>
                     <p class="price price--task"><?= $task->price ?> ₽</p>
                 </div>
-                <p class="info-text"><span class="current-time"><?= $task->create_time ?> </span>назад</p>
+                <p class="info-text"><span class="current-time"><?= Yii::$app->formatter->asRelativeTime(
+                            $task->create_time
+                        ) ?> </span>назад</p>
                 <p class="task-text">
                     <?= $task->info ?>
                 </p>
@@ -40,40 +45,35 @@ use yii\widgets\ActiveForm;
         endforeach ?>
 
 
-        <?php if ($pages->getPageCount() > 1) : ?>
-            <div class="pagination-wrapper">
-                <ul class="pagination-list">
-                    <li class="pagination-item mark">
-                        <a class="link link--page"
-                           href=<?= '/tasks/' . ($pages->getPage() > 0 ? $pages->getPage() : '#') ?>
-                        ></a>
-                    </li>
-                    <?php for ($page = 1; $page <= $pages->getPageCount(); $page++) : ?>
-                        <li class="pagination-item
-                    <?= ($page === $pages->getPage() + 1) ? 'pagination-item--active' : '' ?>">
-                            <a class="link link--page" href=<?= '/tasks/' . $page ?>><?= $page ?></a>
-                        </li>
-                    <?php endfor; ?>
-                    <li class="pagination-item mark">
-                        <a class="link link--page href=<?= '/tasks/' .
-                        ($pages->getPage() < $pages->getPageCount() - 1 ? $pages->getPage() + 2 : '#') ?>
-                           "></a>
-                    </li>
-                </ul>
-            </div>
-        <?php endif; ?>
+
+
+        <?= \yii\widgets\LinkPager::widget([
+            'pagination'           => $pages,
+            'activePageCssClass'   =>
+                'pagination-item--active',
+            'options'              => ['class' => 'pagination-list'],
+            'linkOptions'          => ['class' => 'link link--page'],
+            'linkContainerOptions' => ['class' => 'pagination-item'],
+            'prevPageLabel'        => false,
+            'nextPageLabel'        => false,
+            'prevPageCssClass'     => 'mark',
+            'nextPageCssClass'     => 'mark',
+
+
+        ]) ?>
+
+        <?php
+        \yii\widgets\Pjax::end(); ?>
     </div>
     <div class="right-column">
         <div class="right-card black">
             <div class="search-form">
                 <?php
                 $form = ActiveForm::begin([
-                    'id' => 'filter-form',
-                    'fieldConfig' => [
-                        'template' => "{input}\n{label}",
-                        'options' => ['class' => 'form-group'],
-                        'labelOptions' => ['class' => 'control-label'],
-                    ],
+                    'id'     => 'filter-form',
+                    'method' => 'GET',
+
+
                 ]); ?>
                 <h4 class="head-card">Категории</h4>
                 <div class="form-group">
@@ -81,11 +81,24 @@ use yii\widgets\ActiveForm;
                         <?= $form->field($taskFilterForm, 'categoryIds')->checkboxList
                         (
                             TaskFilterForm::getCategories(),
+
                             [
-                                'separator' => '<br>',
-                                'checked' => true,
+                                'separator'       => '<br>',
+                                'comma-separated' => true,
+                                'item'            => function ($index, $label, $name, $checked, $value) {
+                                   $name = $value;
+                                   if ($value === 'translation'){
+                                       $checked = 'checked';
+                                   }
+                                   $value = true;
+
+
+
+                                    return "<label class='checkbox col-md-4' style='font-weight: normal;'><input type='checkbox' {$checked} name='{$name}' value='{$value}'>{$label}</label>";
+                                },
                             ]
                         )->label(false) ?>
+
                     </div>
                     <h4 class="head-card">Дополнительно</h4>
                     <div class="form-group">
