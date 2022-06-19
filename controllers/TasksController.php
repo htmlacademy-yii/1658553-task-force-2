@@ -59,6 +59,8 @@ class TasksController extends \yii\web\Controller
         $taskFilterForm->load(Yii::$app->request->get());
         $taskSearchService = new SearchTasksService();
         $query = $taskSearchService->search($taskFilterForm);
+        var_dump(Yii::$app->request->get());
+
 
         $countQuery = clone $query;
         $pages = new Pagination(
@@ -70,6 +72,7 @@ class TasksController extends \yii\web\Controller
             ]
         );
         $tasks = $countQuery->offset($pages->offset)->limit($pages->limit)->all();
+
 
 
         return $this->render('index', ['taskInfo' => $tasks, 'taskFilterForm' => $taskFilterForm, 'pages' => $pages]

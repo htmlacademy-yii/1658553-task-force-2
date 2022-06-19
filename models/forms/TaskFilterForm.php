@@ -84,6 +84,7 @@ class TaskFilterForm extends Model
     }
 
 
+
     /**
      * @return array дропдаун для лейбла "период"
      */

@@ -9,6 +9,7 @@
 
 use app\models\forms\TaskFilterForm;
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 
@@ -48,16 +49,16 @@ use yii\widgets\ActiveForm;
 
 
         <?= \yii\widgets\LinkPager::widget([
-            'pagination'           => $pages,
-            'activePageCssClass'   =>
+            'pagination' => $pages,
+            'activePageCssClass' =>
                 'pagination-item--active',
-            'options'              => ['class' => 'pagination-list'],
-            'linkOptions'          => ['class' => 'link link--page'],
+            'options' => ['class' => 'pagination-list'],
+            'linkOptions' => ['class' => 'link link--page'],
             'linkContainerOptions' => ['class' => 'pagination-item'],
-            'prevPageLabel'        => false,
-            'nextPageLabel'        => false,
-            'prevPageCssClass'     => 'mark',
-            'nextPageCssClass'     => 'mark',
+            'prevPageLabel' => false,
+            'nextPageLabel' => false,
+            'prevPageCssClass' => 'mark',
+            'nextPageCssClass' => 'mark',
 
 
         ]) ?>
@@ -70,27 +71,36 @@ use yii\widgets\ActiveForm;
             <div class="search-form">
                 <?php
                 $form = ActiveForm::begin([
-                    'id'     => 'filter-form',
+                    'id' => 'filter-form',
                     'method' => 'GET',
+                    'action' => Url::to(['tasks/index']),
 
 
                 ]); ?>
                 <h4 class="head-card">Категории</h4>
                 <div class="form-group">
                     <div>
+
+
                         <?= $form->field($taskFilterForm, 'categoryIds')->checkboxList
                         (
                             TaskFilterForm::getCategories(),
 
                             [
-                                'separator'       => '<br>',
+                                'separator' => '<br>',
                                 'comma-separated' => true,
-                                'item'            => function ($index, $label, $name, $checked, $value) {
-                                   $name = $value;
-                                   if ($value === 'translation'){
-                                       $checked = 'checked';
-                                   }
-                                   $value = true;
+                                'item' => function ($index, $label, $name, $checked, $value) {
+
+                                //настраиваем параметры инпута для корректного запроса в бд
+                                $name = $value;
+                                    foreach (Yii::$app->request->get() as $getParam=>$getValue){
+                                        if($getParam === $value & !empty($getValue)){
+                                            $checked = 'checked';
+                                        }
+                                    }
+                                $value = $index +1;
+
+
 
 
 

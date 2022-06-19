@@ -3,6 +3,7 @@
 namespace app\services\tasks;
 
 
+use app\models\Categories;
 use app\models\forms\TaskFilterForm;
 use app\models\Tasks;
 use app\models\Users;
@@ -33,6 +34,30 @@ class SearchTasksService
         }
 
 
-        return  $query->andWhere(['category_id' => $taskFilterForm->categoryIds]);
+
+
+
+        $categoryList = [
+            $taskFilterForm->translation, $taskFilterForm->clean, $taskFilterForm->cargo,
+            $taskFilterForm->neo, $taskFilterForm->flat, $taskFilterForm->repair, $taskFilterForm->beauty, $taskFilterForm->photo
+        ];
+
+
+        $taskFilterForm->categoryIds = [];
+
+        foreach ($categoryList as $categoryItem){
+            if ($categoryItem){
+                $taskFilterForm->categoryIds[] = (int) $categoryItem;
+            }
+
+        }
+
+
+
+
+
+
+
+        return $query->andWhere(['category_id' => $taskFilterForm->categoryIds]);
     }
 }
