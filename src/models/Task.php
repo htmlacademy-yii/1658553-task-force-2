@@ -22,6 +22,7 @@ class Task
     public int $executorId;
     public string $status;
 
+
     public function __construct(string $status,int $customerId, int $executorId = null)
     {
         $this->executorId = $executorId;

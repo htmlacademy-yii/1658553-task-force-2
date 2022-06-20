@@ -15,33 +15,40 @@ class AddTaskService
     {
         $newTask = new Tasks();
         $newTask->create_time = date('Y-m-d H:i:s');
-        $newTask->deadline_time = date('Y-m-d H:i:s',strtotime($addTaskForm->deadline_time));
         $newTask->name = $addTaskForm->name;
         $newTask->info = $addTaskForm->info;
         $newTask->category_id = $addTaskForm->category_id;
         $newTask->city_id = $addTaskForm->city_id;
-        $newTask->price =  $addTaskForm->price;
-        $newTask->customer_id = 1;
+        $newTask->price = $addTaskForm->price;
+        $newTask->customer_id = Yii::$app->user->identity->getId();;
         $newTask->executor_id = null;
         $newTask->status = 1;
+        if ($addTaskForm->deadline_time) {
+            $newTask->deadline_time = date('Y-m-d H:i:s', strtotime($addTaskForm->deadline_time));
+        } else {
+            $newTask->deadline_time = null;
+        }
         $newTask->save();
 
-        $addTaskForm->files = UploadedFile::getInstance($addTaskForm, 'files');
+        $addTaskForm->files = UploadedFile::getInstances($addTaskForm, 'files');
         if ($addTaskForm->files) {
-            $fileName = $addTaskForm->files->baseName.date('yymmddHHmmss').
-                '.'.
-                $addTaskForm->files->extension;
-            $path = 'img/tasksSrc/';
-            $addTaskForm->files->saveAs(
-                $path.$fileName
-            );
-            $newFile = new Files();
-            $newFile->path = "/$path"."$fileName";
-            $newFile->save();
-            $taskFile = new TaskFiles();
-            $taskFile->file_id = $newFile->getId();
-            $taskFile->task_id = $newTask->getId();
+            $taskId = $newTask->getId();
+            mkdir("taskSrc/"."$taskId");
+            $path = "taskSrc/"."$taskId/";
+            foreach ($addTaskForm->files as $file) {
+                $fileName = $file->baseName.'.'.$file->extension;
 
+                $file->saveAs(
+                    $path.$fileName
+                );
+                $newFile = new Files();
+                $newFile->path = "$path"."$fileName";
+                $newFile->save();
+                $taskFile = new TaskFiles();
+                $taskFile->file_id = $newFile->getId();
+                $taskFile->task_id = $newTask->getId();
+                $taskFile->save();
+            }
         }
 
         return $newTask->getId();

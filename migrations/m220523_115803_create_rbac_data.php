@@ -18,10 +18,10 @@ class m220523_115803_create_rbac_data extends Migration
         $auth->add($createPost);
 
         //добавляем роли
-        $executorRole = $auth->createRole('employer');
-        $auth->add($executorRole);
+        $employerRole = $auth->createRole('employer');
+        $auth->add($employerRole);
         //связываем роли с правами
-        $auth->addChild($executorRole,$createPost);
+        $auth->addChild($employerRole,$createPost);
 
     }
 

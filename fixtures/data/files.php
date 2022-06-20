@@ -31,4 +31,34 @@ return [
     'files9' => [
         'path' => '/img/avatars/anon.jpg',
     ],
+    'files10' => [
+        'path' => '/img/avatars/anon.jpg',
+    ],
+    'files11' => [
+        'path' => '/img/avatars/anon.jpg',
+    ],
+    'files12' => [
+        'path' => '/img/avatars/anon.jpg',
+    ],
+    'files13' => [
+        'path' => '/img/avatars/anon.jpg',
+    ],
+    'files14' => [
+        'path' => '/img/avatars/anon.jpg',
+    ],
+    'files15' => [
+        'path' => '/img/avatars/anon.jpg',
+    ],
+    'files16' => [
+        'path' => '/img/avatars/anon.jpg',
+    ],
+    'files17' => [
+        'path' => '/img/avatars/anon.jpg',
+    ],
+    'files18' => [
+        'path' => '/img/avatars/anon.jpg',
+    ],
+    'files19' => [
+        'path' => '/img/avatars/anon.jpg',
+    ],
 ];

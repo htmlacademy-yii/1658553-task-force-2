@@ -2490,7 +2490,7 @@ footer {
 .form-modal-close::after {
   content: "";
   position: absolute;
-  background-image: url("img/cross-big.png");
+  background-image: url("../img/cross-big.png");
   width: 27px;
   height: 27px;
   top: 0;

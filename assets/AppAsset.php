@@ -23,7 +23,7 @@ class AppAsset extends AssetBundle
         'css/style.css'
     ];
     public $js = [
-        'js/main.js'
+        'js/main.js','js/modal.js','js/modalDone.js','js/modalRefuse.js'
     ];
     public function init()
     {

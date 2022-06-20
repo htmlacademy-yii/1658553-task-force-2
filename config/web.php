@@ -4,14 +4,15 @@ $params = require __DIR__.'/params.php';
 $db = require __DIR__.'/db.php';
 
 $config = [
-    'id'         => 'basic',
-    'basePath'   => dirname(__DIR__),
-    'bootstrap'  => ['log'],
-    'aliases'    => [
+    'id'           => 'basic',
+    'language'     => 'ru-RU',
+    'basePath'     => dirname(__DIR__),
+    'bootstrap'    => ['log'],
+    'aliases'      => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
-    'components' => [
+    'components'   => [
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],
@@ -50,30 +51,46 @@ $config = [
         'db'           => $db,
 
         'urlManager' => [
+
             'enablePrettyUrl' => true,
             'showScriptName'  => false,
-            'rules'           => [
-                'tasks/view/<id:\d+>' => 'tasks/view',
-                'user/view/<id:\d+>'  => 'user/view',
+
+            'rules' => [
+
+                'tasks/view/<id:\d+>'                                                                                                                                                                                                                                             => 'tasks/view',
+                'user/view/<id:\d+>'                                                                                                                                                                                                                                              => 'user/view',
+                'tasks/download/<fileId:\d+>'                                                                                                                                                                                                                                     => 'tasks/download',
+                'tasks/cancel/<taskId:\d+>'                                                                                                                                                                                                                                       => 'tasks/cancel',
+                'tasks/respond/<taskId:\d+>/<executorId:\d+>'                                                                                                                                                                                                                     => 'tasks/respond',
+                'tasks/refuse/<taskId:\d+>'                                                                                                                                                                                                                                       => 'tasks/refuse',
+                'tasks/done/<taskId:\d+>'                                                                                                                                                                                                                                         => 'tasks/done',
+                'tasks/rejected/<taskId:\d+>/<executorId:\d+>/<isRejected:\d+>'                                                                                                                                                                                                   => 'tasks/rejected',
+                'tasks/page/<page:\d+>' => 'tasks/index',
+
+
             ],
+
         ],
 
+
     ],
-    'params'     => $params,
+    'params'       => $params,
+    'defaultRoute' => 'landing/index',
+
 ];
 
 if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment
     $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
-        'class' => 'yii\debug\Module',
+        'class'      => 'yii\debug\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
         'allowedIPs' => ['*', '::1'],
     ];
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
-        'class' => 'yii\gii\Module',
+        'class'      => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
         'allowedIPs' => ['*', '::1'],
     ];

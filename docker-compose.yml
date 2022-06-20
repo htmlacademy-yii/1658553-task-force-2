@@ -10,11 +10,12 @@ services:
     networks:
       - default
     ports:
-      - ':9000'
+      ["8080:8080"]
     depends_on:
       - db
     volumes:
       - "./:/var/www/html"
+      - "./deploy/php/:/usr/local/etc/php"
 
 
 
