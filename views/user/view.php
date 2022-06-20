@@ -83,7 +83,7 @@ use yii\helpers\Html;
                 <dt>Дата регистрации</dt>
                 <dd><?= Yii::$app->formatter->asDate($userInfo->create_date) ?></dd>
                 <dt>Статус</dt>
-                <dd><?= $userInfo->status ?></dd>
+                <dd><?= $successFailCount['status'] ?></dd>
             </dl>
         </div>
         <div class="right-card white">

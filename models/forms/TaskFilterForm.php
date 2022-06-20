@@ -7,6 +7,7 @@ use yii\base\Model;
 
 class TaskFilterForm extends Model
 {
+    const INTERVAL_NOT_SELECTED_HOURS = 0;
     const INTERVAL_1_HOURS = 1;
     const INTERVAL_12_HOURS = 2;
     const INTERVAL_24_HOURS = 3;
@@ -91,6 +92,7 @@ class TaskFilterForm extends Model
     public static function getInterval()
     {
         $interval = [];
+        $interval[self::INTERVAL_NOT_SELECTED_HOURS] = 'Любой';
         $interval[self::INTERVAL_1_HOURS] = '1 час';
         $interval[self::INTERVAL_12_HOURS] = '12 часов';
         $interval[self::INTERVAL_24_HOURS] = '24 часа';

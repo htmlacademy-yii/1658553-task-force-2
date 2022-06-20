@@ -3,11 +3,9 @@
 namespace app\services\tasks;
 
 
-use app\models\Categories;
 use app\models\forms\TaskFilterForm;
 use app\models\Tasks;
 use app\models\Users;
-use Codeception\Module\Yii2;
 
 class SearchTasksService
 {
@@ -29,33 +27,42 @@ class SearchTasksService
         if ($taskFilterForm->isRemote) {
             $query = $query->andWhere('city_id IS NOT NULL');
         } else {
-
             $query = $query->andWhere(['city_id' => "$user->city_id"]);
         }
+
+
+        if ((int)$taskFilterForm->interval === TaskFilterForm::INTERVAL_1_HOURS) {
+            $query = $query->andWhere(['between','create_time',date('Y-m-d H:i:s',strtotime('-1 hour')),date('Y-m-d H:i:s')]);
+            } elseif ((int)$taskFilterForm->interval === TaskFilterForm::INTERVAL_12_HOURS) {
+            $query = $query->andWhere(['between','create_time',date('Y-m-d H:i:s',strtotime('-12 hour')),date('Y-m-d H:i:s')]);
+            } elseif ((int)$taskFilterForm->interval === TaskFilterForm::INTERVAL_24_HOURS) {
+            $query = $query->andWhere(['between','create_time',date('Y-m-d H:i:s',strtotime('-24 hour')),date('Y-m-d H:i:s')]);
+
+        } else $query = $query->orderBy(['create_time'=>SORT_DESC]);
 
 
 
 
 
         $categoryList = [
-            $taskFilterForm->translation, $taskFilterForm->clean, $taskFilterForm->cargo,
-            $taskFilterForm->neo, $taskFilterForm->flat, $taskFilterForm->repair, $taskFilterForm->beauty, $taskFilterForm->photo
+            $taskFilterForm->translation,
+            $taskFilterForm->clean,
+            $taskFilterForm->cargo,
+            $taskFilterForm->neo,
+            $taskFilterForm->flat,
+            $taskFilterForm->repair,
+            $taskFilterForm->beauty,
+            $taskFilterForm->photo,
         ];
 
 
         $taskFilterForm->categoryIds = [];
 
-        foreach ($categoryList as $categoryItem){
-            if ($categoryItem){
-                $taskFilterForm->categoryIds[] = (int) $categoryItem;
+        foreach ($categoryList as $categoryItem) {
+            if ($categoryItem) {
+                $taskFilterForm->categoryIds[] = (int)$categoryItem;
             }
-
         }
-
-
-
-
-
 
 
         return $query->andWhere(['category_id' => $taskFilterForm->categoryIds]);

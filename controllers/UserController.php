@@ -40,6 +40,7 @@ class UserController extends \yii\web\Controller
         $successFailCount = new SuccessFailCountService();
         $successFailCount = $successFailCount->search($id);
 
+
         return $this->render('view', ['userInfo' => $query, 'successFailCount' => $successFailCount]);
     }
 }
