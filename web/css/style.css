@@ -694,7 +694,8 @@ template {
 .specialization-bio {
   display: -webkit-box;
   display: -ms-flexbox;
-  display: flex; }
+  display: flex;
+  justify-content: space-between}
 
 .specialization {
   max-width: 427px; }
@@ -741,7 +742,7 @@ template {
 .stars-rating span::before {
   position: absolute;
   content: "";
-  background-image: url("img/star-empty.svg");
+  background-image: url("../img/star-empty.svg");
   background-size: 25px;
   background-position: center;
   background-repeat: no-repeat;

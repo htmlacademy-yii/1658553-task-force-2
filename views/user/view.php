@@ -36,9 +36,9 @@ use yii\helpers\Html;
                         </li>
                     <?php
                     endforeach; ?>
+
                 </ul>
             </div>
-
             <div class="bio">
                 <p class="head-info">Био</p>
                 <p class="bio-info"><span class="country-info">Россия</span>, <span

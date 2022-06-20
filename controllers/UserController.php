@@ -33,7 +33,7 @@ class UserController extends \yii\web\Controller
     public function actionView($id)
     {
         $query = Users::find()->where("id = $id")->one();
-        var_dump($query->id);
+
         if (!$query) {
             throw new NotFoundHttpException('Пользователь не найден');
         }

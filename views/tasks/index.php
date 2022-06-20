@@ -61,6 +61,7 @@ use yii\widgets\ActiveForm;
             'nextPageCssClass' => 'mark',
 
 
+
         ]) ?>
 
         <?php
@@ -86,9 +87,11 @@ use yii\widgets\ActiveForm;
                         (
                             TaskFilterForm::getCategories(),
 
+
                             [
                                 'separator' => '<br>',
                                 'comma-separated' => true,
+                                'name'=>'',
                                 'item' => function ($index, $label, $name, $checked, $value) {
 
                                 //настраиваем параметры инпута для корректного запроса в бд

@@ -7,7 +7,6 @@ use app\models\forms\AddDoneForm;
 use app\models\forms\AddResponseForm;
 use app\models\forms\AddTaskForm;
 use app\models\forms\TaskFilterForm;
-use app\models\Reviews;
 use app\models\Tasks;
 use app\services\tasks\AddTaskService;
 use app\services\tasks\ChangeStatusTaskService;
@@ -53,13 +52,12 @@ class TasksController extends \yii\web\Controller
     //список заданий и фильтры
     public function actionIndex()
     {
-
         $taskFilterForm = new TaskFilterForm();
 
         $taskFilterForm->load(Yii::$app->request->get());
         $taskSearchService = new SearchTasksService();
         $query = $taskSearchService->search($taskFilterForm);
-        var_dump(Yii::$app->request->get());
+
 
 
         $countQuery = clone $query;
@@ -69,10 +67,10 @@ class TasksController extends \yii\web\Controller
                 'pageSize'       => 5,
                 'forcePageParam' => false,
                 'pageSizeParam'  => false,
+                'route' => 'tasks/index'
             ]
         );
         $tasks = $countQuery->offset($pages->offset)->limit($pages->limit)->all();
-
 
 
         return $this->render('index', ['taskInfo' => $tasks, 'taskFilterForm' => $taskFilterForm, 'pages' => $pages]

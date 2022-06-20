@@ -18,7 +18,7 @@ return [
     'city_id' => $faker->numberBetween(1,1087),
     'birthday' => $faker->dateTimeBetween('1988-04-01', '2010-04-01')->format('Y-m-d H:i:s'),
     'info' => $faker->realTextBetween($minNbChars = 160, $maxNbChars = 200, $indexSize = 2),
-    'rating' => $faker->numberBetween(1,2000),
+    'rating' => $faker->numberBetween(1,5),
     'status' => $faker->numberBetween(1,4),
 
 ];
