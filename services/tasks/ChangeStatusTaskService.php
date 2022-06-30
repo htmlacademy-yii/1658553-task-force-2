@@ -5,39 +5,32 @@ namespace app\services\tasks;
 use app\models\Reviews;
 use app\models\Tasks;
 use app\models\Users;
-use app\widgets\taskViewButtons\actions\accessButtonsControl;
-use app\widgets\taskViewButtons\actions\ActionCancel;
-use app\widgets\taskViewButtons\actions\ActionDone;
-use app\widgets\taskViewButtons\actions\ActionRefuse;
-use app\widgets\taskViewButtons\actions\ActionRespond;
 use Yii;
 
 class ChangeStatusTaskService
 {
     public object $task;
-    public object $user;
-    private object $control;
+
 
     public function __construct($taskId)
     {
-        $userId = Yii::$app->user->id;
-        $this->user = Users::find()->where("id = $userId")->one();
+
         $this->task = Tasks::find()->where("id = $taskId")->one();
-        $this->control = new AccessButtonsControl($this->task);
+
     }
 
     public function cancel()
     {
-        if ((new ActionCancel())->isAvailable($this->control, $this->user->id)) {
-            $this->task->status = accessButtonsControl::STATUS_CANCELLED;
+        if (Yii::$app->user->can('cancelTask',['taskId'=>$this->task->id])){
+            $this->task->status = Tasks::STATUS_CANCELLED;
             $this->task->save();
         }
     }
 
     public function respond($executorId)
     {
-        if ((new ActionRespond())->isAvailable($this->control, $this->user->id)) {
-            $this->task->status = accessButtonsControl::STATUS_IN_WORK;
+        if (Yii::$app->user->can('cancelTask',['taskId'=>$this->task->id])){
+            $this->task->status = Tasks::STATUS_IN_WORK;
             $this->task->executor_id = $executorId;
             $this->task->save();
         }
@@ -45,16 +38,16 @@ class ChangeStatusTaskService
 
     public function refuse()
     {
-        if ((new ActionRefuse())->isAvailable($this->control, $this->user->id)) {
-            $this->task->status = accessButtonsControl::STATUS_FAILED;
+        if (Yii::$app->user->can('refuseTask',['taskId'=>$this->task->id])){
+            $this->task->status = Tasks::STATUS_FAILED;
             $this->task->save();
         }
     }
 
     public function done()
     {
-        if ((new ActionDone())->isAvailable($this->control, $this->user->id)) {
-            $this->task->status = accessButtonsControl::STATUS_DONE;
+        if (Yii::$app->user->can('doneTask',['taskId'=>$this->task->id])){
+            $this->task->status = Tasks::STATUS_DONE;
             $this->task->save();
         }
     }
@@ -62,7 +55,7 @@ class ChangeStatusTaskService
     public function updateRating()
     {
         $taskId = $this->task->id;
-        $failStatus = accessButtonsControl::STATUS_FAILED;
+        $failStatus = Tasks::STATUS_FAILED;
 
         $task = Tasks::find()->where("id = $taskId")->one();
 

@@ -9,9 +9,6 @@ class responseBlock extends Widget
     public array $responses;
     public object $taskInfo;
 
-    public function isTaskHaveExecutor(){
-
-    }
     public function run()
     {
 

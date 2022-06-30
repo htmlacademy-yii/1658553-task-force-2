@@ -3,19 +3,17 @@
 
 /** @var object $taskInfo */
 
-use app\widgets\taskViewButtons\actions\AccessButtonsControl;
 use yii\helpers\Html;
 
 ?>
 <?php
-if (($taskInfo->customer_id === Yii::$app->user->id
-    && (string)$taskInfo->status !==
-    accessButtonsControl::STATUS_NEW)
-): ?>
+
+if (Yii::$app->user->can('cancelTask', ['taskId' => $taskInfo->id])):?>
     <h4 class="head-regular">Ваш исполнитель</h4>
-     <?php else: ?>
+<?php
+else: ?>
     <h4 class="head-regular">Отклики на задание</h4>
-        <?php
+<?php
 endif; ?>
 
 <?php
@@ -44,15 +42,14 @@ foreach ($responses as $response): ?>
         </div>
 
         <div class="feedback-wrapper">
-            <p class="info-text"><span class="current-time"><?= Yii::$app->formatter->asRelativeTime($response->create_time)
+            <p class="info-text"><span class="current-time"><?= Yii::$app->formatter->asRelativeTime(
+                        $response->create_time
+                    )
                     ?></span></p>
             <p class="price price--small"><?= $response->price ?></p>
         </div>
         <?php
-        if ($taskInfo->customer_id === Yii::$app->user->id
-            && (string)$taskInfo->status ===
-            accessButtonsControl::STATUS_NEW
-        ): ?>
+        if (Yii::$app->user->can('cancelTask', ['taskId' => $taskInfo->id])):?>
             <div class="button-popup">
                 <?= Html::a('Принять', [
                     'tasks/rejected',
@@ -75,7 +72,8 @@ foreach ($responses as $response): ?>
                         button--small',
                 ]); ?>
             </div>
-        <?php endif;?>
+        <?php
+        endif; ?>
     </div>
 <?php
 endforeach; ?>

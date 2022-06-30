@@ -13,7 +13,6 @@ use app\services\tasks\ChangeStatusTaskService;
 use app\services\tasks\ResponseTaskService;
 use app\services\tasks\SearchTasksService;
 use app\services\user\ReviewsUserService;
-use app\widgets\taskViewButtons\actions\AccessButtonsControl;
 use Yii;
 use yii\data\Pagination;
 use yii\filters\AccessControl;
@@ -59,8 +58,6 @@ class TasksController extends \yii\web\Controller
         $query = $taskSearchService->search($taskFilterForm);
 
 
-
-
         $countQuery = clone $query;
         $pages = new Pagination(
             [
@@ -68,11 +65,10 @@ class TasksController extends \yii\web\Controller
                 'pageSize'       => 5,
                 'forcePageParam' => false,
                 'pageSizeParam'  => false,
-                'route' => 'tasks/index'
+                'route'          => 'tasks/index',
             ]
         );
         $tasks = $countQuery->offset($pages->offset)->limit($pages->limit)->all();
-
 
         return $this->render('index', ['taskInfo' => $tasks, 'taskFilterForm' => $taskFilterForm, 'pages' => $pages]
         );
@@ -88,7 +84,6 @@ class TasksController extends \yii\web\Controller
         }
         $response = new ResponseTaskService();
         $responseForm = new AddResponseForm();
-
         $doneForm = new AddDoneForm();
         $doneService = new ReviewsUserService();
 
@@ -115,7 +110,10 @@ class TasksController extends \yii\web\Controller
 
 
         //логика списка откликов на задание
-        if ((string)$taskInfo->status !== accessButtonsControl::STATUS_NEW) {
+        if ((string)$taskInfo->status !== Tasks::STATUS_NEW
+            && (string)$taskInfo->status !==
+            Tasks::STATUS_CANCELLED
+        ) {
             $responses = $response->getResponse($id);
         } else {
             $responses = $response->getResponses($id);

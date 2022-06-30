@@ -24,8 +24,19 @@ namespace app\models;
  * @property Responses[] $responses
  * @property TaskFiles[] $taskFiles
  */
+
 class Tasks extends \yii\db\ActiveRecord
 {
+    public const STATUS_NEW = '1';
+    public const STATUS_CANCELLED = '2';
+    public const STATUS_IN_WORK = '3';
+    public const STATUS_DONE = '4';
+    public const STATUS_FAILED = '5';
+
+    public const ACTION_RESPOND = 'respond';
+    public const ACTION_CANCEL = 'cancel';
+    public const ACTION_DONE = 'done';
+    public const ACTION_REFUSE = 'refuse';
     /**
      * {@inheritdoc}
      */
@@ -189,5 +200,20 @@ class Tasks extends \yii\db\ActiveRecord
     public function getId()
     {
         return $this->id;
+    }
+    /**
+     * Возвращает карту статусов
+     *
+     * @return string[] Карта статусов
+     */
+    public function getStatusMap(): array
+    {
+        return [
+            self::STATUS_NEW       => 'новое',
+            self::STATUS_CANCELLED => 'отмененное',
+            self::STATUS_IN_WORK   => 'в работе',
+            self::STATUS_DONE      => 'выполнено',
+            self::STATUS_FAILED    => 'провалено',
+        ];
     }
 }

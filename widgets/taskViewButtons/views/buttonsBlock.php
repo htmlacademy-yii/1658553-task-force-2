@@ -1,43 +1,29 @@
 <?php
-/** @var object $taskControl */
+/** @var object $taskInfo */
 
 /** @var object $responseForm */
 
 /** @var object $doneForm */
 
 
-use app\widgets\taskViewButtons\actions\ActionCancel;
-use app\widgets\taskViewButtons\actions\ActionDone;
-use app\widgets\taskViewButtons\actions\ActionRefuse;
-use app\widgets\taskViewButtons\actions\ActionRespond;
-use app\widgets\taskViewButtons\actions\UserRespond;
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 ?>
 
 <?php
-$taskId = $taskControl->task->id;
-if ((new ActionCancel())->isAvailable($taskControl, Yii::$app->user->id)) {
+$taskId = $taskInfo->id;
+if (Yii::$app->user->can('cancelTask',['taskId'=>$taskId])){
     print Html::a('Отменить задание', ["tasks/cancel/$taskId"], ['class' => 'button button--blue']);
 }
-if ((new ActionDone())->isAvailable($taskControl, Yii::$app->user->id)) {
+if (Yii::$app->user->can('doneTask',['taskId'=>$taskId])){
     print Html::submitButton('Завершить задание', ['class' => 'button button--blue', 'id' => 'btnShowDone']);
 }
-if ((new ActionRefuse())->isAvailable($taskControl, Yii::$app->user->id)) {
-
+if (Yii::$app->user->can('refuseTask',['taskId'=>$taskId])){
     print Html::submitButton('Отказаться от задания', ['class' => 'button button--blue','id'=>'btnShowRefuse']);
-
 }
-if ((new ActionRespond())->isAvailable($taskControl, Yii::$app->user->id)
-    && UserRespond::isUserRespond
-    (
-        $taskControl->task->id,
-        Yii::$app->user->id
-    )
-    && Yii::$app->user->id !==
-    $taskControl->customerId
-) {
+if (Yii::$app->user->can('respondTask',['taskId'=>$taskId])){
     print Html::submitButton('Откликнуться на задание', ['class' => 'button button--blue', 'id' => 'btnShowResponse']);
 }
 
