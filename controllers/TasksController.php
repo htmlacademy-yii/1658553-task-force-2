@@ -8,6 +8,7 @@ use app\models\forms\AddResponseForm;
 use app\models\forms\AddTaskForm;
 use app\models\forms\TaskFilterForm;
 use app\models\Tasks;
+use app\models\Users;
 use app\services\tasks\AddTaskService;
 use app\services\tasks\ChangeStatusTaskService;
 use app\services\tasks\ResponseTaskService;
@@ -38,7 +39,7 @@ class TasksController extends \yii\web\Controller
                     [
                         'allow'   => true,
                         'actions' => ['add'],
-                        'roles'   => ['employer'],
+                        'roles'   => ['employer','admin'],
                     ],
                 ],
                 'denyCallback' => function ($rule, $action) {
@@ -58,17 +59,26 @@ class TasksController extends \yii\web\Controller
         $query = $taskSearchService->search($taskFilterForm);
 
 
+
         $countQuery = clone $query;
+
         $pages = new Pagination(
             [
                 'totalCount'     => $countQuery->count(),
                 'pageSize'       => 5,
                 'forcePageParam' => false,
                 'pageSizeParam'  => false,
-                'route'          => 'tasks/index',
+
+
+
             ]
         );
+
+
+
         $tasks = $countQuery->offset($pages->offset)->limit($pages->limit)->all();
+
+
 
         return $this->render('index', ['taskInfo' => $tasks, 'taskFilterForm' => $taskFilterForm, 'pages' => $pages]
         );
@@ -152,8 +162,10 @@ class TasksController extends \yii\web\Controller
 
             return Yii::$app->response->redirect(["tasks/view/$newTaskId"]);
         }
+        $userInfo = Users::find()->where(['id'=>Yii::$app->user->id])->one();
 
-        return $this->render('add', ['addTaskForm' => $addTaskForm]);
+
+        return $this->render('add', ['addTaskForm' => $addTaskForm,'userInfo'=>$userInfo]);
     }
 
 

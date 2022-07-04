@@ -55,6 +55,7 @@ $config = [
             'enablePrettyUrl' => true,
             'showScriptName'  => false,
 
+
             'rules' => [
 
                 'tasks/view/<id:\d+>'                                                                                                                                                                                                                                             => 'tasks/view',
@@ -65,7 +66,7 @@ $config = [
                 'tasks/refuse/<taskId:\d+>'                                                                                                                                                                                                                                       => 'tasks/refuse',
                 'tasks/done/<taskId:\d+>'                                                                                                                                                                                                                                         => 'tasks/done',
                 'tasks/rejected/<taskId:\d+>/<executorId:\d+>/<isRejected:\d+>'                                                                                                                                                                                                   => 'tasks/rejected',
-                'tasks/page/<page:\d+>' => 'tasks/index',
+                'tasks/page/<page:\d+>/tasks/index/' => 'tasks/index',
 
 
             ],

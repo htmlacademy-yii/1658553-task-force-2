@@ -32,7 +32,6 @@ class RegistrationForm extends Model
             [['city'], 'exist', 'skipOnError' => true, 'targetClass' => Cities::class, 'targetAttribute' => ['city'
                                                                                                              => 'id']],
             [['password_repeat'], 'compare', 'compareAttribute' => 'password','message'=>'пароли не совпадают'],
-            [['password'], 'compare','message'=>'пароли не совпадают'],
             [['password','password_repeat'],'string','min'=>6,'max'=>20,'tooShort'=>'пароль должен быть от 6 до 20 символов','tooLong'=>'пароль должен быть от 6 до 20 символов']
         ];
     }

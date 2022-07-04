@@ -6,7 +6,7 @@ networks:
 
 services:
   php:
-    image: yiisoftware/yii2-php:8.1-fpm
+    build: ./deploy/php
     networks:
       - default
     ports:
@@ -15,7 +15,12 @@ services:
       - db
     volumes:
       - "./:/var/www/html"
-      - "./deploy/php/:/usr/local/etc/php"
+      - "./deploy/php/php/:/usr/local/etc/php"
+    environment:
+       PHP_ENABLE_XDEBUG: 1
+
+
+
 
 
 
