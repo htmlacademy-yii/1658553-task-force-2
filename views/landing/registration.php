@@ -3,6 +3,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use app\models\forms\RegistrationForm;
 
 ?>
 <main class="container container--registration">
@@ -18,7 +19,7 @@ use yii\widgets\ActiveForm;
                     'id'   => 'email-user',
                     'type' => 'email',
                 ]) ?>
-                <?= $form->field($regForm, 'city')->dropDownList(\app\models\forms\RegistrationForm::getCities()) ?>
+                <?= $form->field($regForm, 'city')->dropDownList(RegistrationForm::getCities()) ?>
             </div>
             <?= $form->field($regForm, 'password')->passwordInput() ?>
             <?= $form->field($regForm, 'password_repeat')->passwordInput() ?>

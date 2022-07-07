@@ -65,7 +65,7 @@ class LandingController extends \yii\web\Controller
 
     public function actionRegistration()
     {
-        $this->layout='registration';
+        $this->layout = 'registration';
 
         $regForm = new RegistrationForm();
         if (Yii::$app->request->post()) {

@@ -3,7 +3,6 @@ namespace app\widgets\taskViewButtons;
 
 
 use app\models\Tasks;
-use app\widgets\taskViewButtons\actions\accessButtonsControl;
 use yii\base\Widget;
 
 class buttonsBlock extends Widget
@@ -21,10 +20,8 @@ class buttonsBlock extends Widget
 
         $task = Tasks::find()->where("id = $this->taskId")->one();
 
-        $taskControl = new accessButtonsControl($task);
 
-
-
-        return $this->render('buttonsBlock',['taskControl'=>$taskControl,'responseForm'=>$this->responseForm,'doneForm'=>$this->doneForm]);
+        return $this->render('buttonsBlock',['taskInfo'=>$task,'responseForm'=>$this->responseForm,
+                                             'doneForm'=>$this->doneForm]);
     }
 }

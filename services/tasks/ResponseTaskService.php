@@ -25,6 +25,7 @@ class ResponseTaskService
     {
         $responses = Responses::find()->where("task_id = $taskId")->andWhere(["rejected" => false])->all();
 
+
         return $responses;
     }
 
@@ -32,7 +33,8 @@ class ResponseTaskService
     {
         $taskInfo = Tasks::find()->where("id = $taskId")->one();
 
-        return Responses::find()->where("task_id = $taskId")->andWhere("executor_id = $taskInfo->executor_id")->all();
+        return Responses::find()->where("task_id = $taskId")->andWhere("executor_id = $taskInfo->executor_id")->andWhere(["rejected" => false])
+            ->all();
     }
 
     public function toDoRejected(int $taskId, int $executorId)

@@ -29,9 +29,10 @@ class RegistrationService extends Component
         $customer->save();
        if (!$registrationForm->isExecutor){
            $role = Yii::$app->authManager->getRole('employer');
-           Yii::$app->authManager->assign($role,$customer->getId());
+       } else {
+           $role = Yii::$app->authManager->getRole('executor');
        }
-
+        Yii::$app->authManager->assign($role,$customer->getId());
     }
 
 }
