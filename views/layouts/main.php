@@ -68,7 +68,7 @@ $this->beginBody() ?>
 <?= Alert::widget() ?>
 <?= $content ?>
 
-<div class="overlay"></div>
+<div class="overlay" id="overlay"></div>
 <?php
 $this->endBody() ?>
 </body>
