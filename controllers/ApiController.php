@@ -3,6 +3,8 @@
 namespace app\controllers;
 
 use app\models\Cities;
+use DOMDocument;
+use DOMXPath;
 use GuzzleHttp\Client;
 use SimpleXMLElement;
 use Yii;
@@ -13,7 +15,6 @@ class ApiController extends Controller
 {
     public function actionIndex()
     {
-        https://geocode-maps.yandex.ru/1.x/?=
 
         foreach (Yii::$app->request->get() as $getParamsKey=>$getParamsValue){
             if ($getParamsKey !=='/api/index'){
@@ -22,32 +23,25 @@ class ApiController extends Controller
         }
 
 
-        $client = new Client(['base_uri' => 'https://geocode-maps.yandex.ru/1.x/']);
-        $response = $client->request('GET', '', [
-            'query' => [
 
-                'apikey' => 'e666f398-c983-4bde-8f14-e3fec900592a',
-                'geocode' => "$queryString"
-            ],
-        ]);
+        $httpClient = new Client();
 
-
-
-
-
-
-        $crawler = new Crawler("https://geocode-maps.yandex.ru/1.x/?apikey=e666f398-c983-4bde-8f14-e3fec900592a&geocode=$queryString","https://geocode-maps.yandex.ru/1.x/?apikey=e666f398-c983-4bde-8f14-e3fec900592a&geocode=$queryString");
-        $crawler->filter('text');
-        var_dump($crawler->filter('text'));
-//        foreach ($crawler as $test){
-//            var_dump($test->nodeName);
-//        }
-
-
-
-//        return json_encode($anime);
+        $response = $httpClient->get("https://geocode-maps.yandex.ru/1.x/?apikey=e666f398-c983-4bde-8f14-e3fec900592a&geocode=$queryString");
+        $htmlString = (string) $response->getBody();
+        //add this line to suppress any warnings
+        libxml_use_internal_errors(true);
+        $doc = new DOMDocument();
+        $doc->loadHTML($htmlString);
+        $xpath = new DOMXPath($doc);
+        $titles = $xpath->evaluate('//text');
+        $extractedTitles = [];
+        foreach ($titles as $title) {
+        $extractedTitles[] = $title->textContent.PHP_EOL;
 
     }
+
+                return json_encode($extractedTitles);
+        }
 
 
 

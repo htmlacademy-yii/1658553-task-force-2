@@ -146,17 +146,16 @@ use yii\widgets\ActiveForm;
             <button type="button" class="btn-address" id="btn-address">Найти</button>
         </form>
         <div class="autoComplete_wrapper">
-            <input id="autoComplete" type="search" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off"
+            <input style="width: 700px" id="autoComplete" type="search" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off"
                    autocapitalize="off">
         </div>
-        <link rel="stylesheet"
-              href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/css/autoComplete.min.css">
+
         <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
 
         <script>
 
             const autoCompleteJS = new autoComplete({
-                placeHolder: "Search for Food...",
+                placeHolder: "Введите Адрес",
                 data: {
                     src: async (query) => {
                         try {
@@ -165,7 +164,7 @@ use yii\widgets\ActiveForm;
                                 .getElementById('autoComplete').value}`);
                             // Data should be an array of `Objects` or `Strings`
                             const data = await source.json();
-                            console.log(data)
+
                             return data;
                         } catch (error) {
                             return error;
