@@ -58,15 +58,16 @@ $config = [
 
             'rules' => [
 
-                'tasks/view/<id:\d+>'                                                                                                                                                                                                                                             => 'tasks/view',
-                'user/view/<id:\d+>'                                                                                                                                                                                                                                              => 'user/view',
-                'tasks/download/<fileId:\d+>'                                                                                                                                                                                                                                     => 'tasks/download',
-                'tasks/cancel/<taskId:\d+>'                                                                                                                                                                                                                                       => 'tasks/cancel',
-                'tasks/respond/<taskId:\d+>/<executorId:\d+>'                                                                                                                                                                                                                     => 'tasks/respond',
-                'tasks/refuse/<taskId:\d+>'                                                                                                                                                                                                                                       => 'tasks/refuse',
-                'tasks/done/<taskId:\d+>'                                                                                                                                                                                                                                         => 'tasks/done',
-                'tasks/rejected/<taskId:\d+>/<executorId:\d+>/<isRejected:\d+>'                                                                                                                                                                                                   => 'tasks/rejected',
-                'tasks/page/<page:\d+>/tasks/index/' => 'tasks/index',
+                'tasks/view/<id:\d+>'                                           => 'tasks/view',
+                'user/view/<id:\d+>'                                            => 'user/view',
+                'tasks/download/<fileId:\d+>'                                   => 'tasks/download',
+                'tasks/cancel/<taskId:\d+>'                                     => 'tasks/cancel',
+                'tasks/respond/<taskId:\d+>/<executorId:\d+>'                   => 'tasks/respond',
+                'tasks/refuse/<taskId:\d+>'                                     => 'tasks/refuse',
+                'tasks/done/<taskId:\d+>'                                       => 'tasks/done',
+                'tasks/rejected/<taskId:\d+>/<executorId:\d+>/<isRejected:\d+>' => 'tasks/rejected',
+                'tasks/page/<page:\d+>/tasks/index/'                            => 'tasks/index',
+                'api/index/'                                   => 'api/index',
 
 
             ],

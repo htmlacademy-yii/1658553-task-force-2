@@ -4,31 +4,51 @@ namespace app\controllers;
 
 use app\models\Cities;
 use GuzzleHttp\Client;
+use SimpleXMLElement;
 use Yii;
 use yii\web\Controller;
+use Symfony\Component\DomCrawler\Crawler;
 
 class ApiController extends Controller
 {
     public function actionIndex()
     {
-        $city = Cities::find()->where("id = 345")->one();
+        https://geocode-maps.yandex.ru/1.x/?=
+
+        foreach (Yii::$app->request->get() as $getParamsKey=>$getParamsValue){
+            if ($getParamsKey !=='/api/index'){
+                $queryString = str_ireplace('_','+',$getParamsKey);
+            }
+        }
 
 
-
-        $vkId = "80834767";
-        $accessToken
-            = 'vk1.a.K7_RMET2TA9hfTgH0hH3yz7ZmOTTfwVazyqORVnipdi1Zq0mFOCCrrPYlBFC_ffNFsng0WxZOeAKp0-6TPwaQ2PE-Y03qJbRBFvxcuUGuH_dORPfeVOa3zLG03z2KDaWTpuEz6FWbjtEFuxkSeWn6qLaDtjo4xokLmv65v0RxbCyhP8qcgItAl0TTiv_Hh0c';
-        $client = new Client(['base_uri' => 'https://api.vk.com/method/']);
-        $response = $client->request('GET', 'users.get', [
+        $client = new Client(['base_uri' => 'https://geocode-maps.yandex.ru/1.x/']);
+        $response = $client->request('GET', '', [
             'query' => [
-                'user_id' => "$vkId",
-                'v' => '5.131',
-                'access_token' => "$accessToken",
+
+                'apikey' => 'e666f398-c983-4bde-8f14-e3fec900592a',
+                'geocode' => "$queryString"
             ],
         ]);
-        $content = $response->getBody()->getContents();
-        $response_data = json_decode($content, true);
-        var_dump($response_data);
+
+
+
+
+
+
+        $crawler = new Crawler("https://geocode-maps.yandex.ru/1.x/?apikey=e666f398-c983-4bde-8f14-e3fec900592a&geocode=$queryString","https://geocode-maps.yandex.ru/1.x/?apikey=e666f398-c983-4bde-8f14-e3fec900592a&geocode=$queryString");
+        $crawler->filter('text');
+        var_dump($crawler->filter('text'));
+//        foreach ($crawler as $test){
+//            var_dump($test->nodeName);
+//        }
+
+
+
+//        return json_encode($anime);
+
     }
+
+
 
 }

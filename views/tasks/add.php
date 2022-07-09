@@ -12,6 +12,7 @@ $coordinates['lon'] = unpack(
 )['lon'];
 
 
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 
@@ -31,7 +32,7 @@ use yii\widgets\ActiveForm;
                     controls: [],
                 },
             );
-        console.log(myMap)
+
 
         // Слушаем клик на карте.
         myMap.events.add('click', function (e) {
@@ -144,6 +145,49 @@ use yii\widgets\ActiveForm;
 
             <button type="button" class="btn-address" id="btn-address">Найти</button>
         </form>
+        <div class="autoComplete_wrapper">
+            <input id="autoComplete" type="search" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off"
+                   autocapitalize="off">
+        </div>
+        <link rel="stylesheet"
+              href="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/css/autoComplete.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
+
+        <script>
+
+            const autoCompleteJS = new autoComplete({
+                placeHolder: "Search for Food...",
+                data: {
+                    src: async (query) => {
+                        try {
+                            // Fetch Data from external Source
+                            const source = await fetch(`http://<?=$_SERVER['HTTP_HOST']?>/api?${document
+                                .getElementById('autoComplete').value}`);
+                            // Data should be an array of `Objects` or `Strings`
+                            const data = await source.json();
+                            console.log(data)
+                            return data;
+                        } catch (error) {
+                            return error;
+                        }
+                    },
+                    // Data source 'Object' key to be searched
+                    keys: [""]
+                },
+                resultItem: {
+                    highlight: true
+                },
+                events: {
+                    input: {
+                        selection: (event) => {
+                            const selection = event.detail.selection.value;
+                            autoCompleteJS.input.value = selection;
+                        }
+                    }
+                }
+            });
+
+        </script>
 
         <?= $form->field($addTaskForm, 'files[]')->fileInput(['multiple' => true]) ?>
         <?= \yii\helpers\Html::submitButton('опубликовать', ['class' => 'button button--blue']); ?>
