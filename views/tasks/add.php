@@ -2,17 +2,9 @@
 
 /* @var object $addTaskForm */
 
-/* @var object $userInfo */
-
-$coordinates = [];
-$coordinates['lat'] = unpack('x/x/x/x/corder/Ltype/dlat/dlon', $userInfo->city->coordinates)['lat'];
-$coordinates['lon'] = unpack(
-    'x/x/x/x/corder/Ltype/dlat/dlon',
-    $userInfo->city->coordinates
-)['lon'];
+/* @var array $coordinates */
 
 
-use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 
@@ -28,7 +20,7 @@ use yii\widgets\ActiveForm;
         var myPlacemark,
             myMap = new ymaps.Map('map', {
                     center: [<?=$coordinates['lat']?>, <?=$coordinates['lon']?>],
-                    zoom: 12,
+                    zoom: 15,
                     controls: [],
                 },
             );
@@ -82,25 +74,42 @@ use yii\widgets\ActiveForm;
                         // В качестве контента балуна задаем строку с адресом объекта.
                         balloonContent: firstGeoObject.getAddressLine()
                     });
-                document.getElementById('address').value = firstGeoObject.getAddressLine();
+                document.getElementById('autoComplete').value = firstGeoObject.getAddressLine();
 
             });
         }
 
-        // Создадим экземпляр элемента управления «поиск по карте»
-        // с установленной опцией провайдера данных для поиска по организациям.
-        let searchControl = new ymaps.control.SearchControl({
-            options: {
-                provider: 'yandex#map',
-            }
-        });
 
         let findBtn = document.getElementById('btn-address')
         findBtn.onclick = function () {
-            myMap.controls.add(searchControl);
-            searchControl.search(document.getElementById('address').value);
+            async function getCoordinate() {
+
+                // запрашиваем информацию об этом пользователе из github
+                const geoResponse = await fetch(`https://geocode-maps.yandex.ru/1.x/?apikey=e666f398-c983-4bde-8f14-e3fec900592a&format=json&geocode=${document.getElementById('autoComplete').value}`);
+                const geoData = await geoResponse.json();
+
+                const geopoints = geoData.response.GeoObjectCollection.featureMember[0].GeoObject.Point.pos
+
+                const temp = geopoints.split(" ");
+
+                const length = Number(temp[1]);
+                const width = Number(temp[0]);
+
+                const coordinates = [length, width]
+
+
+                return myMap.panTo(coordinates,
+                    {
+                        flying: true
+
+                    });
+
+            }
+
+            getCoordinate()
 
         }
+
 
     }
 
@@ -132,61 +141,17 @@ use yii\widgets\ActiveForm;
         </div>
         <div class="task-map">
             <div id="map" style="width: 600px; height: 400px"></div
-                    <!--            <p class="map-address town">--><!--</p>-->
-                    <!--            <p class="map-address">Новый арбат, 23, к. 1</p>-->
 
         </div>
 
 
-        <form>
-            <input class="address" id="address" style="width: 600px;" type="text" value=""
-                   placeholder="тут появится адрес">
-
-
-            <button type="button" class="btn-address" id="btn-address">Найти</button>
-        </form>
         <div class="autoComplete_wrapper">
-            <input style="width: 700px" id="autoComplete" type="search" dir="ltr" spellcheck=false autocorrect="off" autocomplete="off"
+            <input style="width: 700px" id="autoComplete" type="search" dir="ltr" spellcheck=false autocorrect="off"
+                   autocomplete="off"
                    autocapitalize="off">
+            <button type="button" class="btn-address" id="btn-address">Найти</button>
         </div>
 
-        <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
-
-        <script>
-
-            const autoCompleteJS = new autoComplete({
-                placeHolder: "Введите Адрес",
-                data: {
-                    src: async (query) => {
-                        try {
-                            // Fetch Data from external Source
-                            const source = await fetch(`http://<?=$_SERVER['HTTP_HOST']?>/api?${document
-                                .getElementById('autoComplete').value}`);
-                            // Data should be an array of `Objects` or `Strings`
-                            const data = await source.json();
-
-                            return data;
-                        } catch (error) {
-                            return error;
-                        }
-                    },
-                    // Data source 'Object' key to be searched
-                    keys: [""]
-                },
-                resultItem: {
-                    highlight: true
-                },
-                events: {
-                    input: {
-                        selection: (event) => {
-                            const selection = event.detail.selection.value;
-                            autoCompleteJS.input.value = selection;
-                        }
-                    }
-                }
-            });
-
-        </script>
 
         <?= $form->field($addTaskForm, 'files[]')->fileInput(['multiple' => true]) ?>
         <?= \yii\helpers\Html::submitButton('опубликовать', ['class' => 'button button--blue']); ?>
@@ -198,3 +163,41 @@ use yii\widgets\ActiveForm;
 
 </main>
 
+<script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
+<script>
+
+    const autoCompleteJS = new autoComplete({
+        placeHolder: "Введите Адрес",
+        data: {
+            src: async (query) => {
+                try {
+                    // Fetch Data from external Source
+                    const source = await fetch(`http://<?=$_SERVER['HTTP_HOST']?>/api/index?query=${document.getElementById('autoComplete').value}`);
+                    // Data should be an array of `Objects` or `Strings`
+                    const data = await source.json();
+
+                    return data;
+                } catch (error) {
+                    return error;
+                }
+            },
+            // Data source 'Object' key to be searched
+            keys: [""]
+        },
+        resultItem: {
+            highlight: true
+        },
+        resultsList: {
+            maxResults: 5
+        },
+        events: {
+            input: {
+                selection: (event) => {
+                    const selection = event.detail.selection.value;
+                    autoCompleteJS.input.value = selection;
+                }
+            }
+        }
+    });
+
+</script>

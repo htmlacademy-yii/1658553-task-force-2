@@ -162,10 +162,18 @@ class TasksController extends \yii\web\Controller
 
             return Yii::$app->response->redirect(["tasks/view/$newTaskId"]);
         }
+
+
         $userInfo = Users::find()->where(['id'=>Yii::$app->user->id])->one();
+        $coordinates = [];
+        $coordinates['lat'] = unpack('x/x/x/x/corder/Ltype/dlat/dlon', $userInfo->city->coordinates)['lat'];
+        $coordinates['lon'] = unpack(
+            'x/x/x/x/corder/Ltype/dlat/dlon',
+            $userInfo->city->coordinates
+        )['lon'];
 
 
-        return $this->render('add', ['addTaskForm' => $addTaskForm,'userInfo'=>$userInfo]);
+        return $this->render('add', ['addTaskForm' => $addTaskForm,'coordinates'=>$coordinates]);
     }
 
 
