@@ -16,6 +16,8 @@ namespace app\models;
  * @property int         $customer_id
  * @property int|null    $executor_id
  * @property int         $status
+ * @property text|null    $address
+ * @property text|null    $tasks_coordinate
  *
  * @property Categories  $category
  * @property Cities      $city
@@ -68,11 +70,11 @@ class Tasks extends \yii\db\ActiveRecord
     {
         return [
             [
-                ['create_time',  'name', 'info', 'category_id', 'city_id', 'customer_id', 'status'],
+                ['create_time',  'name', 'info', 'category_id', 'city_id', 'customer_id', 'status','address','tasks_coordinate'],
                 'required',
             ],
             [['create_time', 'deadline_time'], 'safe'],
-            [['info'], 'string'],
+            [['info','address','tasks_coordinate'], 'string'],
             [['category_id', 'city_id', 'price', 'customer_id', 'executor_id', 'status'], 'integer'],
             [['name'], 'string', 'max' => 255],
             [

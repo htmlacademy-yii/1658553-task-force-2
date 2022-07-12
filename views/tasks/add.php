@@ -5,6 +5,7 @@
 /* @var array $coordinates */
 
 
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 
@@ -146,9 +147,23 @@ use yii\widgets\ActiveForm;
 
 
         <div class="autoComplete_wrapper">
-            <input style="width: 700px" id="autoComplete" type="search" dir="ltr" spellcheck=false autocorrect="off"
-                   autocomplete="off"
-                   autocapitalize="off">
+            <?= $form->field(
+                $addTaskForm,
+                'address',
+                [
+                    'enableAjaxValidation' => true,
+
+                ]
+            )
+                ->textInput(['id'                   => 'autoComplete',
+                             'style'                => 'width: 700px',
+                             'type'                 => 'search',
+                             'dir'                  => 'ltr',
+                             'spellcheck'           => false,
+                             'autocorrect'          => 'off',
+                             'autocapitalize' => 'off'])
+            ?>
+
             <button type="button" class="btn-address" id="btn-address">Найти</button>
         </div>
 
@@ -162,19 +177,34 @@ use yii\widgets\ActiveForm;
 
 
 </main>
-
+<?php var_dump(Yii::$app->request->getCsrfToken()); ?>
+<br>
+<?php var_dump(Yii::$app->request->csrfParam);  ?>
 <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
 <script>
 
     const autoCompleteJS = new autoComplete({
         placeHolder: "Введите Адрес",
         data: {
+
             src: async (query) => {
                 try {
                     // Fetch Data from external Source
-                    const source = await fetch(`http://<?=$_SERVER['HTTP_HOST']?>/api/index?query=${document.getElementById('autoComplete').value}`);
+                    const source = await fetch('<?=Url::toRoute('api/index')?>',
+                        {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json;charset=utf-8',
+                                'X-CSRF-TOKEN': '<?=Yii::$app->request->getCsrfToken()?>',
+                            },
+                            body: JSON.stringify(document.getElementById('autoComplete').value)
+
+                        }
+                    )
                     // Data should be an array of `Objects` or `Strings`
                     const data = await source.json();
+                    console.log(data)
+                    console.log(JSON.stringify(document.getElementById('autoComplete').value))
 
                     return data;
                 } catch (error) {
@@ -201,3 +231,4 @@ use yii\widgets\ActiveForm;
     });
 
 </script>
+

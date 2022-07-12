@@ -16,6 +16,8 @@ class AddTaskForm extends Model
     public $price;
     public $deadline_time;
     public $files;
+    public $address;
+    public $tasks_coordinate;
 
     public function rules()
     {
