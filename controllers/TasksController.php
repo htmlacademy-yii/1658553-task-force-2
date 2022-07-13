@@ -42,7 +42,7 @@ class TasksController extends \yii\web\Controller
                         'roles'   => ['employer','admin'],
                     ],
                 ],
-                'denyCallback' => function ($rule, $action) {
+                'denyCallback' => function () {
                     return Yii::$app->response->redirect(['landing/index']);
                 },
             ],
@@ -148,17 +148,19 @@ class TasksController extends \yii\web\Controller
     {
         $addTaskForm = new AddTaskForm();
         $addTaskForm->load(Yii::$app->request->post());
+
+
         if (Yii::$app->request->isAjax) {
             Yii::$app->response->format = Response::FORMAT_JSON;
 
             return ActiveForm::validate($addTaskForm);
         }
 
+
         if ($addTaskForm->validate()) {
             $addTaskForm->files = UploadedFile::getInstances($addTaskForm, 'files');
             $addTask = new AddTaskService();
             $newTaskId = $addTask->addTask($addTaskForm);
-
 
             return Yii::$app->response->redirect(["tasks/view/$newTaskId"]);
         }
@@ -175,6 +177,7 @@ class TasksController extends \yii\web\Controller
 
         return $this->render('add', ['addTaskForm' => $addTaskForm,'coordinates'=>$coordinates]);
     }
+
 
 
     public function actionDownload(int $fileId)

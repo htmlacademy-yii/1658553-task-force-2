@@ -16,7 +16,6 @@ use yii\widgets\ActiveForm;
 </script>
 <script type="text/javascript">
 
-
     function init() {
         var myPlacemark,
             myMap = new ymaps.Map('map', {
@@ -34,6 +33,7 @@ use yii\widgets\ActiveForm;
             // Если метка уже создана – просто передвигаем ее.
             if (myPlacemark) {
                 myPlacemark.geometry.setCoordinates(coords);
+                document.getElementById('taskCoordinate').value = coords;
             }
             // Если нет – создаем.
             else {
@@ -43,6 +43,7 @@ use yii\widgets\ActiveForm;
                 myPlacemark.events.add('dragend', function () {
                     getAddress(myPlacemark.geometry.getCoordinates());
                 });
+                document.getElementById('taskCoordinate').value = coords;
             }
             getAddress(coords);
         });
@@ -97,6 +98,23 @@ use yii\widgets\ActiveForm;
                 const width = Number(temp[0]);
 
                 const coordinates = [length, width]
+                document.getElementById('taskCoordinate').value = coordinates;
+
+                if (myPlacemark) {
+                    myPlacemark.geometry.setCoordinates(coordinates);
+                }
+                // Если нет – создаем.
+                else {
+                    myPlacemark = createPlacemark(coordinates);
+                    myMap.geoObjects.add(myPlacemark);
+                    // Слушаем событие окончания перетаскивания на метке.
+                    myPlacemark.events.add('dragend', function () {
+                        getAddress(myPlacemark.geometry.getCoordinates());
+                    });
+
+                }
+                getAddress(coordinates);
+
 
 
                 return myMap.panTo(coordinates,
@@ -106,8 +124,8 @@ use yii\widgets\ActiveForm;
                     });
 
             }
-
             getCoordinate()
+
 
         }
 
@@ -124,9 +142,9 @@ use yii\widgets\ActiveForm;
         <?php
         $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]) ?>
 
-        <?= $form->field($addTaskForm, 'name', ['enableAjaxValidation' => true])->textInput()
+        <?= $form->field($addTaskForm, 'name',['enableAjaxValidation'=>true])->textInput()
         ?>
-        <?= $form->field($addTaskForm, 'info', ['enableAjaxValidation' => true])->textarea()
+        <?= $form->field($addTaskForm, 'info')->textarea()
         ?>
         <?= $form->field($addTaskForm, 'category_id')->dropDownList(\app\models\forms\AddTaskForm::getCategory())
         ?>
@@ -149,27 +167,38 @@ use yii\widgets\ActiveForm;
         <div class="autoComplete_wrapper">
             <?= $form->field(
                 $addTaskForm,
-                'address',
-                [
-                    'enableAjaxValidation' => true,
+                'address')
+                ->textInput([
+                    'id'             => 'autoComplete',
+                    'style'          => 'width: 700px',
+                    'type'           => 'search',
+                    'dir'            => 'ltr',
+                    'spellcheck'     => false,
+                    'autocorrect'    => 'off',
+                    'autocapitalize' => 'off',
 
-                ]
-            )
-                ->textInput(['id'                   => 'autoComplete',
-                             'style'                => 'width: 700px',
-                             'type'                 => 'search',
-                             'dir'                  => 'ltr',
-                             'spellcheck'           => false,
-                             'autocorrect'          => 'off',
-                             'autocapitalize' => 'off'])
+                ])->label(false)
+            ?>
+            <?= $form->field(
+                $addTaskForm,
+                'tasks_coordinate')
+                ->textInput([
+                    'id'             => 'taskCoordinate',
+                    'style'          => 'display:none',
+                    'type'           => 'search',
+                    'dir'            => 'ltr',
+                    'spellcheck'     => false,
+                    'autocorrect'    => 'off',
+                    'autocapitalize' => 'off',
+
+                ])->label(false)
             ?>
 
-            <button type="button" class="btn-address" id="btn-address">Найти</button>
         </div>
 
 
         <?= $form->field($addTaskForm, 'files[]')->fileInput(['multiple' => true]) ?>
-        <?= \yii\helpers\Html::submitButton('опубликовать', ['class' => 'button button--blue']); ?>
+        <?= \yii\helpers\Html::submitButton('опубликовать', ['class' => 'button button--blue']) ?>
         <?php
         ActiveForm::end(); ?>
 
@@ -177,9 +206,6 @@ use yii\widgets\ActiveForm;
 
 
 </main>
-<?php var_dump(Yii::$app->request->getCsrfToken()); ?>
-<br>
-<?php var_dump(Yii::$app->request->csrfParam);  ?>
 <script src="https://cdn.jsdelivr.net/npm/@tarekraafat/autocomplete.js@10.2.7/dist/autoComplete.min.js"></script>
 <script>
 

@@ -7,6 +7,7 @@ use DOMDocument;
 use DOMXPath;
 use GuzzleHttp\Client;
 use Yii;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 
 
