@@ -16,6 +16,8 @@ class AddTaskForm extends Model
     public $price;
     public $deadline_time;
     public $files;
+    public $address;
+    public $tasks_coordinate;
 
     public function rules()
     {
@@ -23,6 +25,8 @@ class AddTaskForm extends Model
             [['name', 'info'], 'required', 'message' => 'поле должно быть заполнено'],
             [['deadline_time'], 'date', 'format' => 'php:Y-m-d', 'skipOnEmpty' => false],
             [['city_id'], 'integer'],
+            [['address','tasks_coordinate'],'string'],
+
             [
                 ['price'],
                 'integer',
@@ -60,6 +64,8 @@ class AddTaskForm extends Model
             'price'         => 'Бюджет',
             'deadline_time' => 'Срок исполнения',
             'files'         => 'Файлы',
+            'address'=>'Адрес',
+            'tasks_coordinate' => 'Координаты'
 
         ];
     }
