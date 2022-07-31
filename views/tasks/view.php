@@ -16,8 +16,36 @@ use yii\helpers\Html;
 use app\models\Tasks;
 
 
+
+
+
 ?>
 
+<script type="text/javascript"
+        src="https://api-maps.yandex.ru/2.1/?apikey=e666f398-c983-4bde-8f14-e3fec900592a&lang=ru_RU">
+
+</script>
+<?php if ($taskInfo->tasks_coordinate): ?>
+<script type="text/javascript">
+    ymaps.ready(init);
+
+    function init () {
+        const map = new ymaps.Map('map', {
+                center: [<?=unpack('x/x/x/x/corder/Ltype/dlat/dlon', $taskInfo->tasks_coordinate)['lat']?>, <?=unpack
+                ('x/x/x/x/corder/Ltype/dlat/dlon', $taskInfo->tasks_coordinate)['lon']?>],
+                zoom: 15
+            })
+
+        const placemark = new ymaps.Placemark([<?=unpack('x/x/x/x/corder/Ltype/dlat/dlon', $taskInfo->tasks_coordinate)
+        ['lat']?>, <?=unpack
+        ('x/x/x/x/corder/Ltype/dlat/dlon', $taskInfo->tasks_coordinate)['lon']?>]);
+
+
+
+        map.geoObjects.add(placemark);
+    }
+</script>
+<?php endif;?>
 <main class="main-content container">
 
     <div class="left-column">
@@ -27,17 +55,14 @@ use app\models\Tasks;
         </div>
         <p class="task-description">
             <?= $taskInfo->info ?></p>
-        <?= buttonsBlock::widget(['taskId' => $taskInfo->id, 'responseForm' => $responseForm,'doneForm'=>$doneForm]) ?>
+        <?= ButtonsBlock::widget(['taskId' => $taskInfo->id, 'responseForm' => $responseForm,'doneForm'=>$doneForm]) ?>
 
 
-        <!--        <div class="task-map">-->
-        <!--            <img class="map" src="../img/map.png" width="725" height="346" alt="Новый арбат, 23, к. 1">-->
-        <!--            <p class="map-address town">Москва</p>-->
-        <!--            <p class="map-address">Новый арбат, 23, к. 1</p>-->
-        <!--        </div>-->
+            <div id="map" style="width: 600px; height: 400px"></div
 
 
-        <?=responseBlock::widget(['responses'=>$responses,'taskInfo' => $taskInfo])?>
+
+        <?=ResponseBlock::widget(['responses'=>$responses,'taskInfo' => $taskInfo])?>
     </div>
     <div class="right-column">
         <div class="right-card black info-card">
@@ -54,7 +79,7 @@ use app\models\Tasks;
                 <dd><?= Tasks::getStatusLabel($taskInfo->status) ?></dd>
             </dl>
         </div>
-        <?= fileCard::widget(['taskId' => $taskInfo->id]) ?>
+        <?= FileCard::widget(['taskId' => $taskInfo->id]) ?>
     </div>
 
 </main>

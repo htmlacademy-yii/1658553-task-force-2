@@ -6,6 +6,7 @@ $db = require __DIR__ . '/db.php';
 $config = [
     'id' => 'basic',
     'language' => 'ru-RU',
+
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'aliases' => [
@@ -15,6 +16,18 @@ $config = [
     'components' => [
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
+        ],
+
+        'authClientCollection' => [
+            'class' => 'yii\authclient\Collection',
+            'clients' => [
+                'vkontakte' => [
+                    'class' => 'yii\authclient\clients\VKontakte',
+                    'clientId' => '8218890',
+                    'clientSecret' => 'dyLk6crlBKxsaFjIZQvH',
+                    'scope' => 'email'
+                ],
+            ],
         ],
 
         'request' => [
@@ -69,6 +82,12 @@ $config = [
                 'tasks/page/<page:\d+>/tasks/index/' => 'tasks/index',
                 'api/index/' => 'api/index',
                 'api/Coordinate' => 'api/Coordinate',
+                'api/Vk' =>'api/Vk',
+                'user/change[-]+pass' =>'user/ChangePass',
+                'user/role[-]+choose' =>'user/RoleChoose',
+
+                'tasks/my-tasks/<status:\w+>/<page:\d+>' =>'tasks/my-tasks',
+                'tasks/my-tasks/<status:\w+>' =>'tasks/my-tasks',
 
 
             ],

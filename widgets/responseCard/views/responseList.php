@@ -7,12 +7,15 @@ use yii\helpers\Html;
 
 ?>
 <?php
-
-if (Yii::$app->user->can('cancelTask', ['taskId' => $taskInfo->id])):?>
+if (($taskInfo->status !== (int)
+    \app\models\Tasks::STATUS_NEW)&&(Yii::$app->user->can('cancelTask', ['taskId' => $taskInfo->id]))):?>
     <h4 class="head-regular">Ваш исполнитель</h4>
 <?php
-else: ?>
+elseif($responses): ?>
     <h4 class="head-regular">Отклики на задание</h4>
+<?php
+else:?>
+<div style="opacity: 100"></div>
 <?php
 endif; ?>
 

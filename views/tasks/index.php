@@ -39,7 +39,8 @@ use yii\widgets\ActiveForm;
                 <div class="footer-task">
                     <p class="info-text town-text"><?= $task->city->name ?></p>
                     <p class="info-text category-text">Переводы</p>
-                    <a href="#" class="button button--black">Смотреть Задание</a>
+                    <a href="<?=Url::to(['tasks/view','id'=>$task->id])?>" class="button button--black">Смотреть
+                        Задание</a>
                 </div>
             </div>
         <?php
@@ -59,8 +60,6 @@ use yii\widgets\ActiveForm;
             'nextPageLabel' => false,
             'prevPageCssClass' => 'mark',
             'nextPageCssClass' => 'mark',
-
-
 
 
         ]) ?>

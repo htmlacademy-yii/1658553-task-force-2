@@ -12,7 +12,7 @@ class AddTaskForm extends Model
     public $name;
     public $info;
     public $category_id;
-    public $city_id;
+    public $city;
     public $price;
     public $deadline_time;
     public $files;
@@ -22,10 +22,9 @@ class AddTaskForm extends Model
     public function rules()
     {
         return [
-            [['name', 'info'], 'required', 'message' => 'поле должно быть заполнено'],
+            [['name', 'info','address'], 'required', 'message' => 'поле должно быть заполнено'],
             [['deadline_time'], 'date', 'format' => 'php:Y-m-d', 'skipOnEmpty' => false],
-            [['city_id'], 'integer'],
-            [['address','tasks_coordinate'],'string'],
+            [['address','tasks_coordinate','city'],'string'],
 
             [
                 ['price'],
@@ -60,7 +59,7 @@ class AddTaskForm extends Model
             'name'          => 'Опишите суть работы',
             'info'          => 'Подробности задания',
             'category_id'   => 'Категория',
-            'city_id'       => 'Локация',
+            'city'       => 'Локация',
             'price'         => 'Бюджет',
             'deadline_time' => 'Срок исполнения',
             'files'         => 'Файлы',
@@ -70,20 +69,6 @@ class AddTaskForm extends Model
         ];
     }
 
-
-    public static function getCities()
-    {
-        /**
-         * @var Cities[] $cities
-         */
-        $cities = Cities::find()->all();
-        $citiesData = [];
-        foreach ($cities as $city) {
-            $citiesData[$city->id] = $city->name;
-        }
-
-        return $citiesData;
-    }
 
 
     public static function getCategory()

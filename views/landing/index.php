@@ -7,6 +7,7 @@
 use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
+use yii\authclient\widgets\AuthChoice;
 
 ?>
 
@@ -15,14 +16,42 @@ use yii\widgets\ActiveForm;
 
 
     <?php
-    $form = ActiveForm::begin(['fieldConfig' => ['template' => '{label}{input}']]); ?>
+    $form = ActiveForm::begin(['fieldConfig' => ['template' => '{label}{input}'],'options' => ['style'=>'margin-bottom:0']]); ?>
 
     <?= $form->field($loginForm, 'email',['enableAjaxValidation' => true])->textInput() ?>
 
     <?= $form->field($loginForm, 'password',['enableAjaxValidation' => true])->passwordInput() ?>
-    <?= Html::submitButton('Войти', ['class' => 'button']) ?>
+    <?= Html::submitButton('Войти', ['class' => 'button','style'=>'margin-top:10px']) ?>
     <?php
     $form = ActiveForm::end(); ?>
+    <div>
+        <?php
+        $authChoice = AuthChoice::begin([
+            'baseAuthUrl' => ['api/social'],
+            'options' => [
+                'style'=>'width:100%'
+            ]
+        ]);
+        foreach ($authChoice->getClients() as $client) {
+            $button = null;
+            if ($client->getId() === 'vkontakte'){
+                $button = Html::button(
+                    '<i class=""">login with vk</i>',
+                    [
+                        'class'=>' button button--blue',
+                        'type' => 'button',
+                        'style'=>'margin-right:14px; margin-top:10px'
+                    ]
+                );
+                echo '<noindex>' . $authChoice->clientLink($client,$button,['rel'=>'nofollow']).'</noindex>';
+            }
+        }
+        AuthChoice::end();
+        ?>
+    </div>
+
+
+
 
 
     <button class="form-modal-close" type="button">Закрыть</button>

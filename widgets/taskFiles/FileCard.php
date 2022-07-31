@@ -4,7 +4,7 @@ use app\services\tasks\GetFilesTaskService;
 use yii\base\Widget;
 
 
-class fileCard extends widget
+class FileCard extends widget
 {
     public $taskId;
     public function run()

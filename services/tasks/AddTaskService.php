@@ -2,14 +2,15 @@
 
 namespace app\services\tasks;
 
+use app\models\Cities;
 use app\models\Files;
 use app\models\forms\AddTaskForm;
 use app\models\TaskFiles;
 use app\models\Tasks;
 use Yii;
-use yii\rest\UpdateAction;
-use yii\web\UploadedFile;
+use yii\db\Exception;
 use yii\db\Migration;
+use yii\web\UploadedFile;
 
 class AddTaskService
 {
@@ -17,18 +18,16 @@ class AddTaskService
     {
         $migration = new Migration();
         $newTask = new Tasks();
+
         $newTask->create_time = date('Y-m-d H:i:s');
         $newTask->name = $addTaskForm->name;
         $newTask->info = $addTaskForm->info;
         $newTask->category_id = $addTaskForm->category_id;
-        $newTask->city_id = $addTaskForm->city_id;
+
         $newTask->price = $addTaskForm->price;
         $newTask->customer_id = Yii::$app->user->identity->getId();
         $newTask->executor_id = null;
         $newTask->status = 1;
-
-
-
 
 
         if ($addTaskForm->deadline_time) {
@@ -36,21 +35,33 @@ class AddTaskService
         } else {
             $newTask->deadline_time = null;
         }
+        $city = Cities::find()->where(['name'=>$addTaskForm->city])->one();
+
+
+        if (!$city){
+            return false;
+        }
+
+        $newTask->city_id = $city->id;
+
 
         $newTask->save();
         $taskId = $newTask->getId();
-        if ($addTaskForm->address && $addTaskForm->tasks_coordinate){
-            $migration->execute(
-                "UPDATE tasks  SET tasks_coordinate = (point('52.65022102182741','90.08403528991799')) where tasks.id = $taskId"
-            );
-            $newTask->address = $addTaskForm->address;
-        } else {
-            $migration->execute(
-                "UPDATE tasks  SET tasks_coordinate = null where tasks.id = $taskId"
-            );
-            $newTask->address = null;
-        }
+
+
+        $latLonArray = explode(',', $addTaskForm->tasks_coordinate);
+        $lat = rtrim($latLonArray[0]);
+        $lon = ltrim($latLonArray[1]);
+        $migration->execute(
+            "UPDATE tasks  SET tasks_coordinate = (point($lat,$lon)) where tasks.id = $taskId"
+        );
+        $newTask->address = $addTaskForm->address;
+
+
         $newTask->save();
+
+
+
 
         $addTaskForm->files = UploadedFile::getInstances($addTaskForm, 'files');
         if ($addTaskForm->files) {

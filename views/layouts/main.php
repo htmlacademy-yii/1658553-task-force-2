@@ -6,15 +6,14 @@
 
 
 use app\assets\AppAsset;
-use app\models\Users;
 use app\widgets\Alert;
+use app\widgets\navigationBar\userBlock;
 use yii\helpers\Html;
 use yii\widgets\Breadcrumbs;
 
-use app\widgets\navigationBar\userBlock;
-
 
 AppAsset::register($this);
+
 
 ?>
 <?php
@@ -35,32 +34,65 @@ $this->beginPage() ?>
 $this->beginBody() ?>
 
 
-<header class="page-header">
+<hdoeader class="page-header">
     <nav class="main-nav">
         <a href='#' class="header-logo">
             <img class="logo-image" src="/img/logotype.png" width=227 height=60 alt="taskforce">
         </a>
         <div class="nav-wrapper">
             <ul class="nav-list">
-                <li class="list-item list-item--active">
-                    <a class="link link--nav">Новое</a>
+                <li class="list-item <?php
+                if (Yii::$app->request->url === \yii\helpers\Url::to(['tasks/index'])) {
+                    print 'list-item--active';
+                } ?>">
+                    <a href="<?=\yii\helpers\Url::to(['tasks/index'])?>" class="link link--nav">Новое</a>
                 </li>
-                <li class="list-item">
-                    <a href="#" class="link link--nav">Мои задания</a>
+                <li class="list-item <?php
+                if (Yii::$app->request->url === \yii\helpers\Url::to(['tasks/my-tasks'])) {
+                    print 'list-item--active';
+                } ?>">
+                    <?php if ((new app\models\Users)->getRoleNameStatic(Yii::$app->user->id)==='employer'): ?>
+                    <a href="<?=\yii\helpers\Url::to(['tasks/my-tasks','status'=>'new'])?>" class="link
+                    link--nav">Мои
+                        задания</a>
+                    <?php else:?>
+                    <a href="<?=\yii\helpers\Url::to(['tasks/my-tasks','status'=>'progress'])?>" class="link
+                    link--nav">Мои
+                        задания</a>
+                    <?php endif;?>
                 </li>
-                <li class="list-item">
+                <li class="list-item <?php
+                if (Yii::$app->request->url === \yii\helpers\Url::to(['tasks/add'])) {
+                    print 'list-item--active';
+                } ?>">
                     <?= Html::a('Создать задание', ['tasks/add'], ['class' => 'link link--nav']) ?>
                 </li>
-                <li class="list-item">
-                    <a href="#" class="link link--nav">Настройки</a>
+                <li class="list-item <?php
+                if (Yii::$app->request->url === \yii\helpers\Url::to(['user/settings'])
+                    || Yii::$app->request->url === \yii\helpers\Url::to(['user/change-pass'])
+                ) {
+                    print 'list-item--active';
+                } ?>">
+                    <a href="<?= \yii\helpers\Url::to(['user/settings']) ?>" class="link link--nav">Настройки</a>
                 </li>
             </ul>
         </div>
     </nav>
 
-   <?= userBlock::widget()?>
-</header>
+    <?= userBlock::widget() ?>
+</hdoeader>
 
+
+<?php
+if (empty(Yii::$app->authManager->getRolesByUser(Yii::$app->user->id))
+    && !(('/'.Yii::$app->controller->id.'/'.
+            Yii::$app->controller->action->id) === \yii\helpers\Url::to(['user/role-choose']))
+): ?>
+    <?php
+    return Yii::$app->response->redirect(['user/role-choose']); ?>
+
+<?php
+endif ?>
 
 <?= Breadcrumbs::widget([
     'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],

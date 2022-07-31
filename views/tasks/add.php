@@ -3,6 +3,7 @@
 /* @var object $addTaskForm */
 
 /* @var array $coordinates */
+/* @var string|null $notFoundCityMessage */
 
 
 use yii\helpers\Url;
@@ -10,6 +11,12 @@ use yii\widgets\ActiveForm;
 
 
 ?>
+<script>
+    <?php if ($notFoundCityMessage): ?>
+    let alertMessage = '<?=$notFoundCityMessage?>'
+    alert(alertMessage)
+    <?php endif; ?>
+</script>
 <script type="text/javascript"
         src="https://api-maps.yandex.ru/2.1/?apikey=e666f398-c983-4bde-8f14-e3fec900592a&lang=ru_RU">
 
@@ -62,7 +69,8 @@ use yii\widgets\ActiveForm;
         function getAddress(coords) {
             myPlacemark.properties.set('iconCaption', 'поиск...');
             ymaps.geocode(coords).then(function (res) {
-                var firstGeoObject = res.geoObjects.get(0);
+                const firstGeoObject = res.geoObjects.get(0);
+
 
                 myPlacemark.properties
                     .set({
@@ -77,6 +85,14 @@ use yii\widgets\ActiveForm;
                         balloonContent: firstGeoObject.getAddressLine()
                     });
                 document.getElementById('autoComplete').value = firstGeoObject.getAddressLine();
+
+                const address = firstGeoObject.getLocalities().length ? firstGeoObject
+                    .getLocalities() : firstGeoObject.getAdministrativeAreas()
+
+
+
+                document.getElementById('cityInput').value = address.shift();
+                console.log(document.getElementById('city').value)
 
             });
         }
@@ -99,6 +115,7 @@ use yii\widgets\ActiveForm;
 
                 const coordinates = [length, width]
                 document.getElementById('taskCoordinate').value = coordinates;
+
 
                 if (myPlacemark) {
                     myPlacemark.geometry.setCoordinates(coordinates);
@@ -148,7 +165,11 @@ use yii\widgets\ActiveForm;
         ?>
         <?= $form->field($addTaskForm, 'category_id')->dropDownList(\app\models\forms\AddTaskForm::getCategory())
         ?>
-        <?= $form->field($addTaskForm, 'city_id')->dropDownList(\app\models\forms\AddTaskForm::getCities())
+        <?= $form->field($addTaskForm, 'city')->textInput([
+                'id' => 'cityInput',
+                'style'=>'display:none'
+
+        ])->label(false)
         ?>
         <div class="half-wrapper">
             <?= $form->field($addTaskForm, 'price')->textInput()
@@ -193,11 +214,13 @@ use yii\widgets\ActiveForm;
 
                 ])->label(false)
             ?>
-
+            <?= \yii\helpers\Html::Button('Найти', ['class' => 'button button--blue','type'=>'button',
+                                                'id'=>'btn-address']) ?>
         </div>
 
 
         <?= $form->field($addTaskForm, 'files[]')->fileInput(['multiple' => true]) ?>
+
         <?= \yii\helpers\Html::submitButton('опубликовать', ['class' => 'button button--blue']) ?>
         <?php
         ActiveForm::end(); ?>
