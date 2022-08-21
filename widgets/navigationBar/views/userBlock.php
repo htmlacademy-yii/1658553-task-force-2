@@ -13,7 +13,7 @@ use yii\helpers\Html;
         <div class="popup-head">
             <ul class="popup-menu">
                 <li class="menu-item">
-                    <a href="#" class="link">Настройки</a>
+                    <a href="<?=\yii\helpers\Url::to(['user/settings'])?>" class="link">Настройки</a>
                 </li>
                 <li class="menu-item">
                     <a href="#" class="link">Связаться с нами</a>

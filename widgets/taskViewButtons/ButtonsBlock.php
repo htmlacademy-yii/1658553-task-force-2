@@ -5,7 +5,7 @@ namespace app\widgets\taskViewButtons;
 use app\models\Tasks;
 use yii\base\Widget;
 
-class buttonsBlock extends Widget
+class ButtonsBlock extends Widget
 {
     public int $taskId;
     public object $responseForm;

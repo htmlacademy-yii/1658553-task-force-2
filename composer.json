@@ -18,7 +18,10 @@
         "yiisoft/yii2": "~2.0.14",
         "yiisoft/yii2-bootstrap4": "~2.0.0",
         "yiisoft/yii2-swiftmailer": "~2.0.0 || ~2.1.0",
-        "guzzlehttp/guzzle": "^7.4"
+        "guzzlehttp/guzzle": "^7.4",
+      "ext-dom": "*",
+        "ext-libxml": "*",
+        "yiisoft/yii2-authclient": "^2.2"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.1.0",
@@ -30,7 +33,9 @@
         "symfony/browser-kit": ">=2.7 <=4.2.4",
         "codeception/module-filesystem": "^1.0.0",
         "codeception/module-yii2": "^1.0.0",
-        "codeception/module-asserts": "^1.0.0"
+        "codeception/module-asserts": "^1.0.0",
+        "symfony/finder": "v5.4.8",
+        "symfony/dom-crawler": "^4.4"
     },
     "config": {
         "process-timeout": 1800,

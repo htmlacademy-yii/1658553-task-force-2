@@ -1,72 +1,93 @@
 <?php
 
-$params = require __DIR__.'/params.php';
-$db = require __DIR__.'/db.php';
+$params = require __DIR__ . '/params.php';
+$db = require __DIR__ . '/db.php';
 
 $config = [
-    'id'           => 'basic',
-    'language'     => 'ru-RU',
-    'basePath'     => dirname(__DIR__),
-    'bootstrap'    => ['log'],
-    'aliases'      => [
+    'id' => 'basic',
+    'language' => 'ru-RU',
+
+    'basePath' => dirname(__DIR__),
+    'bootstrap' => ['log'],
+    'aliases' => [
         '@bower' => '@vendor/bower-asset',
-        '@npm'   => '@vendor/npm-asset',
+        '@npm' => '@vendor/npm-asset',
     ],
-    'components'   => [
+    'components' => [
         'authManager' => [
             'class' => 'yii\rbac\DbManager',
         ],
 
-        'request'      => [
+        'authClientCollection' => [
+            'class' => 'yii\authclient\Collection',
+            'clients' => [
+                'vkontakte' => [
+                    'class' => 'yii\authclient\clients\VKontakte',
+                    'clientId' => '8218890',
+                    'clientSecret' => 'dyLk6crlBKxsaFjIZQvH',
+                    'scope' => 'email'
+                ],
+            ],
+        ],
+
+        'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'mtE2xqSfDJy8p9OnmJVyL3Kv6QxXXUzE',
         ],
-        'cache'        => [
+        'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
-        'user'         => [
-            'identityClass'   => 'app\models\Users',
+        'user' => [
+            'identityClass' => 'app\models\Users',
             'enableAutoLogin' => true,
 
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
-        'mailer'       => [
-            'class'            => 'yii\swiftmailer\Mailer',
+        'mailer' => [
+            'class' => 'yii\swiftmailer\Mailer',
             // send all mails to a file by default. You have to set
             // 'useFileTransport' to false and configure transport
             // for the mailer to send real emails.
             'useFileTransport' => true,
         ],
-        'log'          => [
+        'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
-            'targets'    => [
+            'targets' => [
                 [
-                    'class'  => 'yii\log\FileTarget',
+                    'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                 ],
             ],
         ],
-        'db'           => $db,
+        'db' => $db,
 
         'urlManager' => [
 
             'enablePrettyUrl' => true,
-            'showScriptName'  => false,
+            'showScriptName' => false,
 
 
             'rules' => [
 
-                'tasks/view/<id:\d+>'                                                                                                                                                                                                                                             => 'tasks/view',
-                'user/view/<id:\d+>'                                                                                                                                                                                                                                              => 'user/view',
-                'tasks/download/<fileId:\d+>'                                                                                                                                                                                                                                     => 'tasks/download',
-                'tasks/cancel/<taskId:\d+>'                                                                                                                                                                                                                                       => 'tasks/cancel',
-                'tasks/respond/<taskId:\d+>/<executorId:\d+>'                                                                                                                                                                                                                     => 'tasks/respond',
-                'tasks/refuse/<taskId:\d+>'                                                                                                                                                                                                                                       => 'tasks/refuse',
-                'tasks/done/<taskId:\d+>'                                                                                                                                                                                                                                         => 'tasks/done',
-                'tasks/rejected/<taskId:\d+>/<executorId:\d+>/<isRejected:\d+>'                                                                                                                                                                                                   => 'tasks/rejected',
+                'tasks/view/<id:\d+>' => 'tasks/view',
+                'user/view/<id:\d+>' => 'user/view',
+                'tasks/download/<fileId:\d+>' => 'tasks/download',
+                'tasks/cancel/<taskId:\d+>' => 'tasks/cancel',
+                'tasks/respond/<taskId:\d+>/<executorId:\d+>' => 'tasks/respond',
+                'tasks/refuse/<taskId:\d+>' => 'tasks/refuse',
+                'tasks/done/<taskId:\d+>' => 'tasks/done',
+                'tasks/rejected/<taskId:\d+>/<executorId:\d+>/<isRejected:\d+>' => 'tasks/rejected',
                 'tasks/page/<page:\d+>/tasks/index/' => 'tasks/index',
+                'api/index/' => 'api/index',
+                'api/Coordinate' => 'api/Coordinate',
+                'api/Vk' =>'api/Vk',
+                'user/change[-]+pass' =>'user/ChangePass',
+                'user/role[-]+choose' =>'user/RoleChoose',
+
+                'tasks/my-tasks/<status:\w+>/<page:\d+>' =>'tasks/my-tasks',
+                'tasks/my-tasks/<status:\w+>' =>'tasks/my-tasks',
 
 
             ],
@@ -75,7 +96,7 @@ $config = [
 
 
     ],
-    'params'       => $params,
+    'params' => $params,
     'defaultRoute' => 'landing/index',
 
 ];
@@ -84,14 +105,14 @@ if (YII_ENV_DEV) {
     // configuration adjustments for 'dev' environment
     $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
-        'class'      => 'yii\debug\Module',
+        'class' => 'yii\debug\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
         'allowedIPs' => ['*', '::1'],
     ];
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
-        'class'      => 'yii\gii\Module',
+        'class' => 'yii\gii\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
         'allowedIPs' => ['*', '::1'],
     ];

@@ -12,7 +12,7 @@ use yii\web\IdentityInterface;
  * @property string $create_date
  * @property string $email
  * @property string $login
- * @property string $password
+ * @property string|null $password
  * @property int|null $avatar_file_id
  * @property string|null $contact_telegram
  * @property string|null $contact_phone
@@ -21,6 +21,8 @@ use yii\web\IdentityInterface;
  * @property string|null $info
  * @property float|null $rating
  * @property int|null $status
+ * @property string $auth_via
+ * @property string|null $social_id
  *
  * @property Cities $city
  * @property Responses[] $responses
@@ -48,11 +50,11 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function rules()
     {
         return [
-            [['create_date', 'email', 'login', 'password', 'city_id'], 'required'],
+            [['create_date', 'email', 'login',  'city_id','auth_via'], 'required'],
             [['create_date', 'birthday'], 'safe'],
             [['avatar_file_id', 'city_id', 'status'], 'integer'],
             [['rating'],'number'],
-            [['info'], 'string'],
+            [['info','social_id'], 'string'],
             [['email', 'login'], 'string', 'max' => 128],
             [['password'], 'string', 'max' => 64],
             [['contact_telegram'], 'string', 'max' => 24],
@@ -177,5 +179,41 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public function validateAuthKey($authKey)
     {
         return true;
+    }
+    /**
+     * Returns user role name according to RBAC
+     * @return string
+     */
+    public function getRoleName()
+    {
+        $roles = Yii::$app->authManager->getRolesByUser($this->id);
+        if (!$roles) {
+            return null;
+        }
+
+        reset($roles);
+        /* @var $role \yii\rbac\Role */
+        $role = current($roles);
+
+        return $role->name;
+    }
+
+
+    /**
+     * Returns user role name according to RBAC
+     * @return string
+     */
+    public function getRoleNameStatic($userId)
+    {
+        $roles = Yii::$app->authManager->getRolesByUser($userId);
+        if (!$roles) {
+            return null;
+        }
+
+        reset($roles);
+        /* @var $role \yii\rbac\Role */
+        $role = current($roles);
+
+        return $role->name;
     }
 }

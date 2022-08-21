@@ -16,6 +16,8 @@ namespace app\models;
  * @property int         $customer_id
  * @property int|null    $executor_id
  * @property int         $status
+ * @property string|null    $address
+ * @property string|null    $tasks_coordinate
  *
  * @property Categories  $category
  * @property Cities      $city
@@ -72,9 +74,10 @@ class Tasks extends \yii\db\ActiveRecord
                 'required',
             ],
             [['create_time', 'deadline_time'], 'safe'],
-            [['info'], 'string'],
+            [['info','address','tasks_coordinate'], 'string'],
             [['category_id', 'city_id', 'price', 'customer_id', 'executor_id', 'status'], 'integer'],
             [['name'], 'string', 'max' => 255],
+            [['address','tasks_coordinate'],'string'],
             [
                 ['category_id'],
                 'exist',
@@ -123,6 +126,8 @@ class Tasks extends \yii\db\ActiveRecord
             'customer_id'   => 'Customer ID',
             'executor_id'   => 'Executor ID',
             'status'        => 'Status',
+            'address' =>'Address',
+            'tasks_coordinate' =>'tasksCoordinate'
 
         ];
     }

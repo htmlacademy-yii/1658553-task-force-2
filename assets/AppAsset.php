@@ -27,8 +27,7 @@ class AppAsset extends AssetBundle
         = [
             'js/main.js',
             'js/modal.js',
-            'js/modalDone.js',
-            'js/modalRefuse.js',
+
         ];
 
     public function init()
