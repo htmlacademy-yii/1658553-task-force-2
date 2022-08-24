@@ -61,12 +61,16 @@ $this->beginBody() ?>
                         задания</a>
                     <?php endif;?>
                 </li>
+<!--                var_dump(Yii::$app->user->id);-->
+
+                <?php if (Yii::$app->user->can('createPost')): ?>
                 <li class="list-item <?php
                 if (Yii::$app->request->url === \yii\helpers\Url::to(['tasks/add'])) {
                     print 'list-item--active';
                 } ?>">
                     <?= Html::a('Создать задание', ['tasks/add'], ['class' => 'link link--nav']) ?>
                 </li>
+                <?php endif?>
                 <li class="list-item <?php
                 if (Yii::$app->request->url === \yii\helpers\Url::to(['user/settings'])
                     || Yii::$app->request->url === \yii\helpers\Url::to(['user/change-pass'])

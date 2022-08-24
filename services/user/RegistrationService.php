@@ -17,7 +17,7 @@ class RegistrationService extends Component
         $customer->login = $registrationForm->login;
         $customer->email = $registrationForm->email;
         $customer->city_id = $registrationForm->city;
-        $customer->password = yii::$app->security()->generatePasswordHash($registrationForm->password);
+        $customer->password = Yii::$app->getSecurity()->generatePasswordHash($registrationForm->password);
         $customer->create_date = date('Y-m-d H:i:s');
         $customer->contact_phone = null;
         $customer->birthday = null;
@@ -28,7 +28,9 @@ class RegistrationService extends Component
         $customer->avatar_file_id = 1;
         $customer->auth_via = 'native';
         $customer->save();
-       if (!$registrationForm->isExecutor){
+
+
+        if (!$registrationForm->isExecutor){
            $role = Yii::$app->authManager->getRole('employer');
        } else {
            $role = Yii::$app->authManager->getRole('executor');
