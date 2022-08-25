@@ -5,14 +5,9 @@
 /** @var string $content */
 
 
-
-
-
 use app\assets\LandingAsset;
 use app\widgets\Alert;
 use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\widgets\ActiveForm;
 use yii\widgets\Breadcrumbs;
 
 
@@ -83,7 +78,8 @@ $this->beginPage() ?>
                     <a href="#" class="header__account-enter open-modal" data-for="enter-form">
                         <span>Вход</span></a>
                     или
-                    <?= Html::a('Регистрация', ['/landing/registration'], ['class'=>'header__account-registration']) ?>
+                    <?= Html::a('Регистрация', ['/landing/registration'], ['class' => 'header__account-registration']
+                    ) ?>
 
                 </div>
             </div>
@@ -119,9 +115,12 @@ $this->beginPage() ?>
                         <li class="links__item">
                             <a href="">Регистрация</a>
                         </li>
-                        <li class="links__item">
-                            <a href="">Создать задание</a>
-                        </li>
+
+
+                            <li class="links__item">
+                                <a href="">Создать задание</a>
+                            </li>
+
                         <li class="links__item">
                             <a href="">Справка</a>
                         </li>
@@ -140,6 +139,7 @@ $this->beginPage() ?>
 
     </div>
     <div class="overlay" id="overlays"></div>
+
     <?php
     $this->endBody() ?>
     </body>

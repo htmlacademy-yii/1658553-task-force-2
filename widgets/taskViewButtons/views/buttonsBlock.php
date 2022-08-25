@@ -23,6 +23,7 @@ if (Yii::$app->user->can('doneTask',['taskId'=>$taskId])){
 if (Yii::$app->user->can('refuseTask',['taskId'=>$taskId])){
     print Html::submitButton('Отказаться от задания', ['class' => 'button button--blue','id'=>'btnShowRefuse']);
 }
+
 if (Yii::$app->user->can('respondTask',['taskId'=>$taskId])){
     print Html::submitButton('Откликнуться на задание', ['class' => 'button button--blue', 'id' => 'btnShowResponse']);
 }
@@ -48,6 +49,25 @@ if (Yii::$app->user->can('respondTask',['taskId'=>$taskId])){
     <?php
     $formResponse = ActiveForm::end(); ?>
 </section>
+<script>
+    let modalResponse = document.getElementById('modalResponse');
+    let btnShowResponse = document.getElementById('btnShowResponse');
+    let formModalCloseResponse = document.getElementById("formModalCloseResponse");
+
+
+    btnShowResponse.onclick = function () {
+        openPopup(modalResponse, overlay);
+
+
+    }
+
+    formModalCloseResponse.onclick = function () {
+        closePopup(modalResponse, overlay);
+
+
+    }
+</script>
+
 
 <section class="modal-done" id="modalDone">
     <h2>Введите данные</h2>
@@ -68,6 +88,22 @@ if (Yii::$app->user->can('respondTask',['taskId'=>$taskId])){
     <?php
     $formDone = ActiveForm::end(); ?>
 </section>
+<script>
+    let modalDone = document.getElementById('modalDone');
+    let btnShowDone = document.getElementById('btnShowDone');
+    let formModalCloseDone = document.getElementById("formModalCloseDone");
+
+
+    btnShowDone.onclick = function () {
+        openPopup(modalDone, overlay);
+
+    }
+
+    formModalCloseDone.onclick = function () {
+        closePopup(modalDone, overlay);
+
+    }
+</script>
 <section class="modal-refuse" id="modalRefuse">
     <h2>Введите данные</h2>
     <button class="form-modal-close" id="formModalCloseRefuse" type="button">Закрыть</button>
@@ -75,5 +111,19 @@ if (Yii::$app->user->can('respondTask',['taskId'=>$taskId])){
 
     <?= Html::a('Отказаться от задания', ["tasks/refuse/$taskId"], ['class' => 'button button--blue']); ?>
 
-
 </section>
+<script>
+    let modalRefuse = document.getElementById('modalRefuse');
+    let btnShowRefuse = document.getElementById('btnShowRefuse');
+    let formModalCloseRefuse = document.getElementById("formModalCloseRefuse");
+
+
+    btnShowRefuse.onclick = function () {
+        openPopup(modalRefuse, overlay);
+
+
+    }
+    formModalCloseRefuse.onclick = function () {
+        closePopup(modalRefuse, overlay);
+    }
+</script>
