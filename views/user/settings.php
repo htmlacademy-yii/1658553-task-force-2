@@ -17,9 +17,7 @@ use yii\widgets\ActiveForm;
             <li class="side-menu-item">
                 <a href="<?=\yii\helpers\Url::to(['user/change-pass'])?>" class="link link--nav">Безопасность</a>
             </li>
-            <li class="side-menu-item">
-                <a href="#" class="link link--nav">Уведомления</a>
-            </li>
+
         </ul>
     </div>
     <div class="my-profile-form">
