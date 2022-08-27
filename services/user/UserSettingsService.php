@@ -6,6 +6,7 @@ use app\models\Files;
 use app\models\forms\UserSettingsForm;
 use app\models\UserCategories;
 use app\models\Users;
+use yii\helpers\Url;
 use yii\web\UploadedFile;
 
 class UserSettingsService
@@ -23,6 +24,9 @@ class UserSettingsService
         if ($userSettingsForm->file) {
 
             $path = "img/avatars/"."$user->id/";
+            if (!file_exists(Url::to("@app/web/".$path))) {
+                mkdir(Url::to('@app/web/'.$path), 0777, true);
+            }
             foreach ($userSettingsForm->file as $file) {
                 $fileName = $file->baseName.'.'.$file->extension;
 
@@ -30,10 +34,10 @@ class UserSettingsService
                     $path.$fileName
                 );
                 $newFile = Files::find()->where(['id'=>$user->avatar_file_id])->one();
-
-                if (file_exists(substr($newFile->path,1))){
+                if ((!$newFile->path === '/img/avatars/anon.jpg') && file_exists(substr($newFile->path, 1))) {
                     unlink(substr($newFile->path,1));
                 }
+
                 $newFile->path = "/$path"."$fileName";
                 $newFile->save();
                 $user->avatar_file_id = $newFile->id;
