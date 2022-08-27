@@ -20,7 +20,6 @@ use yii\data\Pagination;
 use yii\filters\AccessControl;
 use yii\web\NotFoundHttpException;
 use yii\web\Response;
-use yii\web\UploadedFile;
 use yii\widgets\ActiveForm;
 
 class TasksController extends \yii\web\Controller
@@ -41,12 +40,12 @@ class TasksController extends \yii\web\Controller
                     [
                         'allow'   => true,
                         'actions' => ['add'],
-                        'roles'   => ['employer','admin'],
+                        'roles'   => ['employer', 'admin'],
                     ],
                     [
                         'allow'   => true,
                         'actions' => ['my-tasks'],
-                        'roles'   => ['employer','admin','executor'],
+                        'roles'   => ['employer', 'admin', 'executor'],
                     ],
 
                 ],
@@ -61,16 +60,19 @@ class TasksController extends \yii\web\Controller
     public function actionIndex()
     {
         $taskFilterForm = new TaskFilterForm();
+        $clearGetParams = Yii::$app->request->get();
+        array_shift($clearGetParams);
 
-        $taskFilterForm->load(Yii::$app->request->get());
         $taskSearchService = new SearchTasksService();
 
-        $query = $taskSearchService->search($taskFilterForm);
+        if ($clearGetParams) {
+            $taskFilterForm->load(Yii::$app->request->get());
 
-
-
+            $query = $taskSearchService->search($taskFilterForm);
+        } else {
+            $query = $taskSearchService->defaultSearch();
+        }
         $countQuery = clone $query;
-
         $pages = new Pagination(
             [
                 'totalCount'     => $countQuery->count(),
@@ -79,14 +81,9 @@ class TasksController extends \yii\web\Controller
                 'pageSizeParam'  => false,
 
 
-
             ]
         );
-
-
-
         $tasks = $countQuery->offset($pages->offset)->limit($pages->limit)->all();
-
 
 
         return $this->render('index', ['taskInfo' => $tasks, 'taskFilterForm' => $taskFilterForm, 'pages' => $pages]
@@ -159,33 +156,28 @@ class TasksController extends \yii\web\Controller
         $notFoundCityMessage = false;
 
         $addTaskForm = new AddTaskForm();
-        $addTaskForm->load(Yii::$app->request->post());
+        if (Yii::$app->request->post()) {
+            $addTaskForm->load(Yii::$app->request->post());
+            if (Yii::$app->request->isAjax) {
+                Yii::$app->response->format = Response::FORMAT_JSON;
 
-
-        if (Yii::$app->request->isAjax) {
-            Yii::$app->response->format = Response::FORMAT_JSON;
-
-            return ActiveForm::validate($addTaskForm);
-        }
-
-
-        if ($addTaskForm->validate()) {
-
-
-
-            $addTask = new AddTaskService();
-            $result = $addTask->addTask($addTaskForm);
-
-            if ($result){
-                $newTaskId = $result;
-                return Yii::$app->response->redirect(["tasks/view/$newTaskId"]);
+                return ActiveForm::validate($addTaskForm);
             }
-            $notFoundCityMessage = 'Этого города нет в списке';
+            if ($addTaskForm->validate()) {
+                $addTask = new AddTaskService();
+                $result = $addTask->addTask($addTaskForm);
 
+                if ($result) {
+                    $newTaskId = $result;
+
+                    return Yii::$app->response->redirect(["tasks/view/$newTaskId"]);
+                }
+                $notFoundCityMessage = 'Этого города нет в списке';
+            }
         }
 
 
-        $userInfo = Users::find()->where(['id'=>Yii::$app->user->id])->one();
+        $userInfo = Users::find()->where(['id' => Yii::$app->user->id])->one();
         $coordinates = [];
         $coordinates['lat'] = unpack('x/x/x/x/corder/Ltype/dlat/dlon', $userInfo->city->coordinates)['lat'];
         $coordinates['lon'] = unpack(
@@ -194,9 +186,15 @@ class TasksController extends \yii\web\Controller
         )['lon'];
 
 
-        return $this->render('add', ['addTaskForm' => $addTaskForm,'coordinates'=>$coordinates,'notFoundCityMessage'=>$notFoundCityMessage]);
+        return $this->render(
+            'add',
+            [
+                'addTaskForm'         => $addTaskForm,
+                'coordinates'         => $coordinates,
+                'notFoundCityMessage' => $notFoundCityMessage,
+            ]
+        );
     }
-
 
 
     public function actionDownload(int $fileId)
@@ -257,9 +255,9 @@ class TasksController extends \yii\web\Controller
 
     public function actionMyTasks(string $status)
     {
-        $user = Users::find()->where(['id'=>Yii::$app->user->id])->one();
+        $user = Users::find()->where(['id' => Yii::$app->user->id])->one();
         $myTasksService = new MyTasksService($user);
-        if ($status === 'new' && $user->getRoleName()==='employer') {
+        if ($status === 'new' && $user->getRoleName() === 'employer') {
             $query = $myTasksService->getMyTasksNew();
             $countQuery = clone $query;
             $pages = new Pagination(
@@ -277,8 +275,7 @@ class TasksController extends \yii\web\Controller
             );
         }
 
-        if ($status==='progress') {
-
+        if ($status === 'progress') {
             $query = $myTasksService->getMyTasksInProgress();
             $countQuery = clone $query;
             $pages = new Pagination(
@@ -291,11 +288,12 @@ class TasksController extends \yii\web\Controller
                 ]
             );
             $tasks = $countQuery->offset($pages->offset)->limit($pages->limit)->all();
+
             return $this->render('myTasks', ['taskInfo' => $tasks, 'pages' => $pages]
             );
         }
 
-        if ($status === 'delayed' && $user->getRoleName() ==='executor') {
+        if ($status === 'delayed' && $user->getRoleName() === 'executor') {
             $query = $myTasksService->getMyTasksDelayed();
             $countQuery = clone $query;
             $pages = new Pagination(
@@ -308,11 +306,12 @@ class TasksController extends \yii\web\Controller
                 ]
             );
             $tasks = $countQuery->offset($pages->offset)->limit($pages->limit)->all();
+
             return $this->render('myTasks', ['taskInfo' => $tasks, 'pages' => $pages]
             );
         }
 
-        if ($status === 'closed'){
+        if ($status === 'closed') {
             $query = $myTasksService->getMyTasksClosed();
             $countQuery = clone $query;
             $pages = new Pagination(
@@ -325,6 +324,7 @@ class TasksController extends \yii\web\Controller
                 ]
             );
             $tasks = $countQuery->offset($pages->offset)->limit($pages->limit)->all();
+
             return $this->render('myTasks', ['taskInfo' => $tasks, 'pages' => $pages]
             );
         }

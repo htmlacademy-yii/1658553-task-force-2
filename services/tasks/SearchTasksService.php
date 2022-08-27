@@ -67,4 +67,16 @@ class SearchTasksService
 
         return $query->andWhere(['category_id' => $taskFilterForm->categoryIds]);
     }
+    public function defaultSearch()
+    {
+
+
+        $query = Tasks::find();
+        $query = $query->where('executor_id IS NULL');
+        $query = $query->andWhere('city_id IS NOT NULL');
+
+         return $query->orderBy(['create_time'=>SORT_DESC]);
+
+
+    }
 }
