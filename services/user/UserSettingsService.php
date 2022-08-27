@@ -34,10 +34,10 @@ class UserSettingsService
                     $path.$fileName
                 );
                 $newFile = Files::find()->where(['id'=>$user->avatar_file_id])->one();
-
-                if (file_exists(substr($newFile->path,1))){
+                if ((!$newFile->path === '/img/avatars/anon.jpg') && file_exists(substr($newFile->path, 1))) {
                     unlink(substr($newFile->path,1));
                 }
+
                 $newFile->path = "/$path"."$fileName";
                 $newFile->save();
                 $user->avatar_file_id = $newFile->id;
